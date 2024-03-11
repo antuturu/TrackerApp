@@ -1,24 +1,165 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13122.16" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="uSY-Gs-A8U">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13104.12"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Tab Bar Controller-->
+        <scene sceneID="E5z-Dz-ibE">
+            <objects>
+                <tabBarController id="uSY-Gs-A8U" sceneMemberID="viewController">
+                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="zcc-0e-Xaz">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="49"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </tabBar>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="viewControllers" id="NOu-yH-RIc"/>
+                        <segue destination="fqa-fz-NF3" kind="relationship" relationship="viewControllers" id="l9A-vO-lJr"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ay1-9m-Qc6" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1553" y="-21"/>
+        </scene>
+        <!--TrackerViewController-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" userLabel="TrackerViewController" customClass="TrackerViewController" customModule="TrackerApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" xcode11CocoaTouchSystemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Трекеры" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fen-Ul-UJM">
+                                <rect key="frame" x="16" y="95.333333333333329" width="145" height="40.666666666666671"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="34"/>
+                                <color key="textColor" name="Black [day]"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x4c-LE-rzA">
+                                <rect key="frame" x="6" y="60" width="47" height="34.333333333333343"/>
+                                <color key="tintColor" name="Black [day]"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" image="plus"/>
+                                <buttonConfiguration key="configuration" style="plain" image="plus" catalog="system">
+                                    <color key="baseForegroundColor" name="Black [day]"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="addNewTrackerTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Fxp-e3-XPz"/>
+                                </connections>
+                            </button>
+                            <datePicker contentMode="redraw" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="date" useCurrentDate="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oHc-Ca-NCe">
+                                <rect key="frame" x="299" y="64" width="78" height="34"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="78" id="h6d-so-vGb"/>
+                                    <constraint firstAttribute="height" constant="34" id="jJ3-I4-HA4"/>
+                                </constraints>
+                                <date key="date" timeIntervalSinceReferenceDate="729592367.36268103">
+                                    <!--2024-02-14 08:32:47 +0000-->
+                                </date>
+                                <date key="minimumDate" timeIntervalSinceReferenceDate="-978267600">
+                                    <!--1970-01-01 11:00:00 +0000-->
+                                </date>
+                                <locale key="locale" localeIdentifier="ru"/>
+                                <connections>
+                                    <action selector="dateChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="dyn-sy-UaF"/>
+                                </connections>
+                            </datePicker>
+                            <stackView hidden="YES" opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="4uH-CO-9sI">
+                                <rect key="frame" x="123.33333333333333" y="414" width="146.33333333333337" height="102.33333333333337"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="errorTracker" translatesAutoresizingMaskIntoConstraints="NO" id="v29-TE-hLK">
+                                        <rect key="frame" x="33.333333333333329" y="0.0" width="80" height="80"/>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Что будем отслеживать?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TSE-6S-4DU">
+                                        <rect key="frame" x="0.0" y="88" width="146.33333333333334" height="14.333333333333329"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                        <color key="textColor" name="Black [day]"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                            </stackView>
+                            <stackView hidden="YES" opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="qCU-ch-PXJ">
+                                <rect key="frame" x="139.66666666666666" y="414" width="113.66666666666666" height="102.33333333333337"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="errorNotFound" translatesAutoresizingMaskIntoConstraints="NO" id="P7p-6f-O4C">
+                                        <rect key="frame" x="17" y="0.0" width="80" height="80"/>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ничего не найдено" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0oC-7E-UwT">
+                                        <rect key="frame" x="0.0" y="88" width="113.66666666666667" height="14.333333333333329"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                        <color key="textColor" name="Black [day]"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                            </stackView>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <color key="backgroundColor" name="White"/>
+                        <constraints>
+                            <constraint firstItem="x4c-LE-rzA" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="6" id="1LJ-6a-tio"/>
+                            <constraint firstItem="x4c-LE-rzA" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="1" id="K5Z-xo-lEQ"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="centerY" secondItem="qCU-ch-PXJ" secondAttribute="firstBaseline" id="Qer-b9-FP4"/>
+                            <constraint firstItem="4uH-CO-9sI" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="WT9-wu-Qaq"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="centerY" secondItem="4uH-CO-9sI" secondAttribute="firstBaseline" id="Xdd-8x-jBY"/>
+                            <constraint firstItem="fen-Ul-UJM" firstAttribute="top" secondItem="x4c-LE-rzA" secondAttribute="bottom" constant="1" id="YU6-Ue-6Xn"/>
+                            <constraint firstAttribute="trailing" secondItem="oHc-Ca-NCe" secondAttribute="trailing" constant="16" id="d1Q-BO-cpn"/>
+                            <constraint firstItem="fen-Ul-UJM" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="16" id="dUs-bx-1uR"/>
+                            <constraint firstItem="oHc-Ca-NCe" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="5" id="qUc-Wd-zLl"/>
+                            <constraint firstItem="qCU-ch-PXJ" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="r7q-ec-cDq"/>
+                        </constraints>
                     </view>
+                    <tabBarItem key="tabBarItem" title="Трекеры" image="TrackerLogoTabBar" id="LGS-GI-b9m"/>
+                    <connections>
+                        <outlet property="addNewTrackerButton" destination="x4c-LE-rzA" id="Jlf-Hl-sar"/>
+                        <outlet property="datePicker" destination="oHc-Ca-NCe" id="Bx2-eg-Rsh"/>
+                        <outlet property="emptyStackView" destination="4uH-CO-9sI" id="fnD-xW-8WV"/>
+                        <outlet property="noSearchResultsStackView" destination="qCU-ch-PXJ" id="B7A-qw-ex1"/>
+                        <outlet property="trackersLabel" destination="fen-Ul-UJM" id="j7d-dc-ihs"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="-425.19083969465646" y="-359.15492957746483"/>
+        </scene>
+        <!--Statistic View Controller-->
+        <scene sceneID="hya-ad-1dy">
+            <objects>
+                <viewController id="fqa-fz-NF3" userLabel="Statistic View Controller" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="UYy-zp-fhW">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="24h-kg-PSy"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Статистика" image="StatisticLogoTabBar" id="wG3-R6-RwW"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="KTi-YI-bTG" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-425" y="387"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="StatisticLogoTabBar" width="28" height="28"/>
+        <image name="TrackerLogoTabBar" width="28" height="28"/>
+        <image name="errorNotFound" width="80" height="80"/>
+        <image name="errorTracker" width="80" height="80"/>
+        <image name="plus" width="19" height="18"/>
+        <image name="plus" catalog="system" width="128" height="113"/>
+        <namedColor name="Black [day]">
+            <color red="0.10199999809265137" green="0.10599999874830246" blue="0.13300000131130219" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="White">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
 </document>
