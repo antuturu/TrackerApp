@@ -31,6 +31,15 @@ final class CreateNewCategoryViewController: UIViewController {
         return textField
     }()
 
+    private let titleLabel: UILabel = {
+        let text = UILabel()
+        text.translatesAutoresizingMaskIntoConstraints = false
+        text.text = "Новая категория"
+        text.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        text.textColor = UIColor(named: "Black [day]")
+        return text
+    }()
+
     private let doneButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -46,12 +55,8 @@ final class CreateNewCategoryViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        view.backgroundColor = UIColor(named: "White")
         setupView()
         setupConstraints()
-        doneButton.isEnabled = false
-        doneButton.backgroundColor = UIColor(named: "Gray")
     }
 
     @objc private func pushDoneButton() {
@@ -60,10 +65,23 @@ final class CreateNewCategoryViewController: UIViewController {
         dismiss(animated: true)
     }
 
+    @objc private func dismissKeyboard() {
+            view.endEditing(true)
+    }
+
     private func setupView() {
-        navigationItem.title = "Новая категория"
-        view.addSubview(textField)
-        view.addSubview(doneButton)
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
+        navigationItem.titleView = titleLabel
+        view.backgroundColor = UIColor(named: "White")
+        doneButton.isEnabled = false
+        doneButton.backgroundColor = UIColor(named: "Gray")
+        [textField,
+         doneButton].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            view.addSubview($0)
+        }
         textField.delegate = self
     }
 

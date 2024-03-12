@@ -47,9 +47,9 @@ final class TrackerViewController: UIViewController {
             ]
         )
     ]
-    var visibleCategories: [TrackerCategory] = []
-    var completedTrackers: [TrackerRecord] = []
-    var currentDate: Date = .init()
+    private var visibleCategories: [TrackerCategory] = []
+    private var completedTrackers: [TrackerRecord] = []
+    private var currentDate: Date = .init()
 
     @IBOutlet weak var trackersLabel: UILabel!
     @IBOutlet weak var addNewTrackerButton: UIButton!
@@ -77,16 +77,30 @@ final class TrackerViewController: UIViewController {
         search.addTarget(self, action: #selector(searchTextChanged), for: .allEvents)
         return search
     }()
+    
+    private lazy var dateLabel: UILabel = {
+        let label = UILabel ()
+        label.backgroundColor = UIColor(named: "BackgroundDatePicker")
+        label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+        label.textAlignment = .center
+        label.textColor = UIColor(named: "Black [day]")
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.clipsToBounds = true
+        label.layer.cornerRadius = 8
+        label.layer.zPosition = 10
+        return label
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        currentDate = Date()
         collectionView.dataSource = self
         collectionView.delegate = self
+        configureView()
         configureConstraints()
         filterVisibleCategories(for: currentDate)
         emptyCollectionView()
         emptySearchCollectionView()
+        updateDateLabelTitle(with: currentDate)
         collectionView.isHidden = true
         searchBar.delegate = self
         guard let color = UIColor(named: "Gray") else { return }
@@ -98,14 +112,9 @@ final class TrackerViewController: UIViewController {
 
     @IBAction func dateChanged(_ sender: Any) {
         currentDate = datePicker.date
+        updateDateLabelTitle(with: currentDate)
         filterVisibleCategories(for: currentDate)
-        if let datePickerContainerView = view.subviews.first(where: { String(describing: type(of: $0)).contains("UIDatePicker") }) {
-            datePickerContainerView.subviews.forEach { subview in
-                if let button = subview as? UIButton {
-                    button.sendActions(for: .touchUpInside)
-                }
-            }
-        }
+        collectionView.reloadData()
     }
 
     @objc private func searchTextChanged() {
@@ -116,7 +125,8 @@ final class TrackerViewController: UIViewController {
         let filteredCategories = categories.map { category in
             let filteredTrackers = category.trackers.filter { tracker in
                 return tracker.name.localizedCaseInsensitiveContains(searchText) &&
-                tracker.schedule.contains(WeekDayModel(rawValue: Calendar.current.component(.weekday, from: currentDate)) ?? .monday)
+                tracker.schedule.contains(WeekDayModel(rawValue: Calendar.current.component(.weekday,
+                                                                        from: currentDate)) ?? .monday)
             }
             return filteredTrackers.isEmpty ? nil : TrackerCategory(
                 title: category.title,
@@ -136,7 +146,14 @@ final class TrackerViewController: UIViewController {
 
     @objc private func dismissKeyboard() {
             view.endEditing(true)
-        }
+    }
+
+    @IBAction private func addNewTrackerTapped(_ sender: Any) {
+        let trackerCreatingViewController = TrackerCreatingViewController()
+        trackerCreatingViewController.delegate = self
+        let navigationController = UINavigationController(rootViewController: trackerCreatingViewController)
+        present(navigationController, animated: true)
+    }
 
     private func addTopBorder(to tabBar: UITabBar?, color: UIColor, width: CGFloat) {
         guard let tabBar = tabBar else { return }
@@ -146,10 +163,17 @@ final class TrackerViewController: UIViewController {
         tabBar.layer.addSublayer(topBorder)
     }
 
-    private func configureConstraints() {
+    private func configureView() {
+        [collectionView,
+         searchBar,
+         dateLabel].forEach {
+            view.addSubview($0)
+        }
+        updateDateLabelTitle(with: currentDate)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(collectionView)
-        view.addSubview(searchBar)
+    }
+
+    private func configureConstraints() {
         NSLayoutConstraint.activate([
             searchBar.topAnchor.constraint(equalTo: trackersLabel.bottomAnchor, constant: 7),
             searchBar.heightAnchor.constraint(equalToConstant: 36),
@@ -159,15 +183,24 @@ final class TrackerViewController: UIViewController {
             collectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 10),
             collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+
+            dateLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            dateLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 5),
+            dateLabel.widthAnchor.constraint(equalToConstant: 77),
+            dateLabel.heightAnchor.constraint(equalToConstant: 34)
         ])
     }
-
-    @IBAction private func addNewTrackerTapped(_ sender: Any) {
-        let trackerCreatingViewController = TrackerCreatingViewController()
-        trackerCreatingViewController.delegate = self
-        let navigationController = UINavigationController(rootViewController: trackerCreatingViewController)
-        present(navigationController, animated: true)
+    
+    private func formattedDate (from date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd.MM.yy"
+        return dateFormatter.string(from: date)
+    }
+    
+    private func updateDateLabelTitle(with date: Date) {
+        let dateString = formattedDate (from: date)
+        dateLabel.text = dateString
     }
 
     private func isMatchRecord(model: TrackerRecord, with trackerId: UUID) -> Bool {
@@ -304,12 +337,15 @@ extension TrackerViewController: UICollectionViewDataSource, UICollectionViewDel
 extension TrackerViewController: TrackerViewControllerDelegate {
     func createdTracker(tracker: Tracker, categoryTitle: String) {
         categories.append(TrackerCategory(title: categoryTitle, trackers: [tracker]))
+        filterVisibleCategories(for: currentDate)
         collectionView.reloadData()
     }
 }
 
 extension TrackerViewController: TrackerCollectionViewCellDelegate {
     func completeTracker(id: UUID) {
+        print(currentDate)
+        print(Date())
         guard currentDate <= Date() else {
             return
         }
@@ -318,12 +354,8 @@ extension TrackerViewController: TrackerCollectionViewCellDelegate {
     }
 
     func uncompleteTracker(id: UUID) {
-        completedTrackers.removeAll { element in
-            if (element.id == id &&  Calendar.current.isDate(element.date, equalTo: currentDate, toGranularity: .day)) {
-                return true
-            } else {
-                return false
-            }
+        completedTrackers.removeAll {
+            $0.id == id && Calendar.current.isDate($0.date, equalTo: currentDate, toGranularity: .day)
         }
         collectionView.reloadData()
     }

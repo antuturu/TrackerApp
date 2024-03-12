@@ -30,12 +30,22 @@ final class TrackerCreatingIrregularViewController: UIViewController {
         return textField
     }()
 
+    private let titleLabel: UILabel = {
+        let text = UILabel()
+        text.translatesAutoresizingMaskIntoConstraints = false
+        text.text = "Новое нерегулярное событие"
+        text.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        text.textColor = UIColor(named: "Black [day]")
+        return text
+    }()
+
     private let tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.backgroundColor = UIColor(named: "Background")
         tableView.layer.cornerRadius = 16
         tableView.layer.masksToBounds = true
+        tableView.separatorStyle = .none
         tableView.register(ButtonCell.self, forCellReuseIdentifier: ButtonCell.reuseIdentifier)
         return tableView
     }()
@@ -58,8 +68,7 @@ final class TrackerCreatingIrregularViewController: UIViewController {
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.layer.cornerRadius = 16
         button.layer.masksToBounds = true
-        let red = UIColor(named: "Red")
-        button.layer.borderColor = red?.cgColor
+        button.layer.borderColor = UIColor(named: "Red")?.cgColor
         button.layer.borderWidth = 1
         button.addTarget(self, action: #selector(pushCancelButton), for: .touchUpInside)
         return button
@@ -91,30 +100,39 @@ final class TrackerCreatingIrregularViewController: UIViewController {
     }
 
     @objc private func pushCreateButton() {
-        let currentDate = Date()
-        let currentWeekday = Calendar.current.component(.weekday, from: currentDate)
+        let currentWeekday = Calendar.current.component(.weekday, from: Date())
         let newSchedule = ScheduleModel(day: WeekDayModel(rawValue: currentWeekday) ?? .sunday, isOn: true)
         let scheduleArray = [newSchedule]
         let weekdayArray = scheduleArray.map { $0.day }
         dismiss(animated: true)
-        let tracker = Tracker(id: UUID(), name: textField.text ?? "", color: .green, emoji: emojiz.randomElement()!, schedule: weekdayArray)
+        let tracker = Tracker(id: UUID(),
+                              name: textField.text ?? "",
+                              color: .green,
+                              emoji: emojiz.randomElement()!,
+                              schedule: weekdayArray)
         delegate?.createTracker(tracker: tracker, categoryTitle: selectedCategory)
     }
 
+    @objc private func dismissKeyboard() {
+            view.endEditing(true)
+    }
+
     private func configureView() {
+        navigationItem.titleView = titleLabel
         view.addSubview(textField)
         view.addSubview(tableView)
         view.addSubview(stackView)
         stackView.addArrangedSubview(cancelButton)
         stackView.addArrangedSubview(createButton)
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
         textField.delegate = self
         tableView.delegate = self
         tableView.dataSource = self
     }
 
     private func configureConstraints() {
-        navigationItem.title = "Новое нерегулярное событие"
-        textField.delegate = self
         NSLayoutConstraint.activate([
             textField.heightAnchor.constraint(equalToConstant: 75),
             textField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
@@ -133,7 +151,7 @@ final class TrackerCreatingIrregularViewController: UIViewController {
         ])
     }
 
-    private func setSubTitle(_ subTitle: String?, forCellAt indexPath: IndexPath) {
+    private func setSubTitle(_ subTitle: String, forCellAt indexPath: IndexPath) {
         guard let cell = tableView.cellForRow(at: indexPath) as? ButtonCell else {
             return
         }

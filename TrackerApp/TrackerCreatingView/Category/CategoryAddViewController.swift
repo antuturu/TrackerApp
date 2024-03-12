@@ -30,6 +30,15 @@ final class CategoryAddViewController: UIViewController {
         return button
     }()
 
+    private let titleLabel: UILabel = {
+        let text = UILabel()
+        text.translatesAutoresizingMaskIntoConstraints = false
+        text.text = "Категории"
+        text.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        text.textColor = UIColor(named: "Black [day]")
+        return text
+    }()
+
     private let tableView: UITableView = {
         let table = UITableView()
         table.translatesAutoresizingMaskIntoConstraints = false
@@ -62,7 +71,6 @@ final class CategoryAddViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(named: "White")
         configureView()
         configureConstraints()
     }
@@ -77,14 +85,18 @@ final class CategoryAddViewController: UIViewController {
     private func configureView() {
         tableView.delegate = self
         tableView.dataSource = self
-        view.addSubview(addButton)
-        view.addSubview(tableView)
-        view.addSubview(imageView)
-        view.addSubview(textNotFoundLabel)
+        navigationItem.titleView = titleLabel
+        view.backgroundColor = UIColor(named: "White")
+        [addButton,
+         tableView,
+         imageView,
+         textNotFoundLabel
+        ].forEach {
+            view.addSubview($0)
+        }
     }
 
     private func configureConstraints() {
-        navigationItem.title = "Категория"
 
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24),
@@ -106,7 +118,7 @@ final class CategoryAddViewController: UIViewController {
             textNotFoundLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
     }
-    
+
     private func showEmptyStateImage() {
         imageView.isHidden = false
         textNotFoundLabel.isHidden = false
@@ -135,7 +147,6 @@ extension CategoryAddViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
 
         selectedCategoryIndex = indexPath.row
-        tableView.reloadData()
 
         let selectedCategory = dataForTableView[indexPath.row]
         delegate?.didSelectCategory(selectedCategory)

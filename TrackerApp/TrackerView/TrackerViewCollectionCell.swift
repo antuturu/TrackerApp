@@ -80,7 +80,6 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
                    isCompletedToday: Bool,
                    completedDays: Int,
                    indexPath: IndexPath) {
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.text = tracker.name
         emojiLabel.text = tracker.emoji
         mainView.backgroundColor = tracker.color

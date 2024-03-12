@@ -36,25 +36,26 @@ final class ButtonCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func set(subText: String?) {
-        if let subText = subText {
-            let paragraphStyle = NSMutableParagraphStyle()
-            paragraphStyle.lineSpacing = 2
-            let subTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor(named: "Gray")]
+    func set(subText: String) {
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineSpacing = 2
+        let subTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor(named: "Gray")]
 
-            let subAttributedString = NSMutableAttributedString(string: subText,
-                                                                attributes: subTextAttributes
-                                                                as [NSAttributedString.Key: Any])
-            subAttributedString.addAttribute(NSAttributedString.Key.paragraphStyle,
-                                             value: paragraphStyle,
-                                             range: NSRange(location: 0, length: subAttributedString.length))
-            titleLabel.numberOfLines = 1
-            subtitleLabel.numberOfLines = 1
-            subtitleLabel.attributedText = subAttributedString
-        } else {
-            titleLabel.text = nil
-            subtitleLabel.text = nil
-        }
+        let subAttributedString = NSMutableAttributedString(
+            string: subText,
+            attributes: subTextAttributes
+            as [NSAttributedString.Key: Any]
+        )
+
+        subAttributedString.addAttribute(
+            NSAttributedString.Key.paragraphStyle,
+            value: paragraphStyle,
+            range: NSRange(location: 0, length: subAttributedString.length)
+        )
+
+        titleLabel.numberOfLines = 1
+        subtitleLabel.numberOfLines = 1
+        subtitleLabel.attributedText = subAttributedString
     }
 
     private func setupView() {

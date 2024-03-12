@@ -7,7 +7,7 @@
 
 import UIKit
 
-//MARK: - UIViewController
+// MARK: - UIViewController
 
 final class TrackerCreatingRegularViewController: UIViewController {
 
@@ -31,6 +31,15 @@ final class TrackerCreatingRegularViewController: UIViewController {
         textField.enablesReturnKeyAutomatically = true
         textField.smartInsertDeleteType = .no
         return textField
+    }()
+
+    private let titleLabel: UILabel = {
+        let text = UILabel()
+        text.translatesAutoresizingMaskIntoConstraints = false
+        text.text = "Новая привычка"
+        text.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        text.textColor = UIColor(named: "Black [day]")
+        return text
     }()
 
     private let tableView: UITableView = {
@@ -105,21 +114,26 @@ final class TrackerCreatingRegularViewController: UIViewController {
         dismiss(animated: true)
     }
 
+    @objc private func dismissKeyboard() {
+            view.endEditing(true)
+    }
+
     private func configureView() {
+        navigationItem.titleView = titleLabel
         view.addSubview(textField)
         view.addSubview(tableView)
         view.addSubview(stackView)
         stackView.addArrangedSubview(cancelButton)
         stackView.addArrangedSubview(createButton)
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
         textField.delegate = self
         tableView.delegate = self
         tableView.dataSource = self
     }
 
     private func configureConstraints() {
-        navigationItem.title = "Новая привычка"
-        view.addSubview(textField)
-        textField.delegate = self
         NSLayoutConstraint.activate([
             textField.heightAnchor.constraint(equalToConstant: 75),
             textField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
@@ -143,7 +157,7 @@ final class TrackerCreatingRegularViewController: UIViewController {
         setSubTitle(category, forCellAt: IndexPath(row: 0, section: 0))
     }
 
-    private func setSubTitle(_ subTitle: String?, forCellAt indexPath: IndexPath) {
+    private func setSubTitle(_ subTitle: String, forCellAt indexPath: IndexPath) {
             guard let cell = tableView.cellForRow(at: indexPath) as? ButtonCell else {
                 return
             }

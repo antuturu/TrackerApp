@@ -11,7 +11,7 @@ protocol ScheduleViewControllerDelegate: AnyObject {
     func updateScheduleInfo(_ selectedDays: [WeekDayModel])
 }
 
-//MARK: - UIViewController
+// MARK: - UIViewController
 
 final class ScheduleViewController: UIViewController {
 
@@ -29,6 +29,15 @@ final class ScheduleViewController: UIViewController {
         tableView.separatorColor = UIColor(named: "Gray")
         tableView.register(CustomCellView.self, forCellReuseIdentifier: CustomCellView.reuseIdentifier)
         return tableView
+    }()
+
+    private let titleLabel: UILabel = {
+        let text = UILabel()
+        text.translatesAutoresizingMaskIntoConstraints = false
+        text.text = "Расписание"
+        text.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        text.textColor = UIColor(named: "Black [day]")
+        return text
     }()
 
     private let doneButton: UIButton = {
@@ -49,7 +58,6 @@ final class ScheduleViewController: UIViewController {
 
         view.backgroundColor = UIColor(named: "White")
         navigationItem.hidesBackButton = true
-        setupNavBar()
         setupView()
         setupConstraints()
     }
@@ -60,14 +68,10 @@ final class ScheduleViewController: UIViewController {
         dismiss(animated: true)
     }
 
-    private func setupNavBar() {
-        navigationItem.title = "Расписание"
-    }
-
     private func setupView() {
         view.addSubview(tableView)
         view.addSubview(doneButton)
-
+        navigationItem.titleView = titleLabel
         tableView.delegate = self
         tableView.dataSource = self
     }
@@ -127,10 +131,6 @@ extension ScheduleViewController: UITableViewDataSource, UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.row == WeekDayModel.allCases.count - 1 {
-            return 76
-        } else {
-            return 75
-        }
+        return 76
     }
 }

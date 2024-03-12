@@ -12,7 +12,7 @@ protocol TrackerCreatingViewControllerProtocol: AnyObject {
     func cancelCreateTracker()
 }
 
-//MARK: - UIViewController
+// MARK: - UIViewController
 
 final class TrackerCreatingViewController: UIViewController, TrackerCreatingViewControllerProtocol {
 
@@ -29,6 +29,15 @@ final class TrackerCreatingViewController: UIViewController, TrackerCreatingView
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.addTarget(self, action: #selector(regularButtonClicked), for: .touchUpInside)
         return button
+    }()
+
+    private let titleLabel: UILabel = {
+        let text = UILabel()
+        text.translatesAutoresizingMaskIntoConstraints = false
+        text.text = "Создание трекера"
+        text.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        text.textColor = UIColor(named: "Black [day]")
+        return text
     }()
 
     private let irregularButton: UIButton = {
@@ -58,6 +67,7 @@ final class TrackerCreatingViewController: UIViewController, TrackerCreatingView
         view.backgroundColor = UIColor(named: "White")
         configureStackView()
         configureConstraints()
+        navigationItem.titleView = titleLabel
     }
 
     @objc private func regularButtonClicked() {
@@ -80,7 +90,6 @@ final class TrackerCreatingViewController: UIViewController, TrackerCreatingView
     }
 
     private func configureConstraints() {
-        navigationItem.title = "Создание трека"
         view.addSubview(stackView)
         NSLayoutConstraint.activate([
             stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
