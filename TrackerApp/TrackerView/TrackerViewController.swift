@@ -77,13 +77,13 @@ final class TrackerViewController: UIViewController {
         search.addTarget(self, action: #selector(searchTextChanged), for: .allEvents)
         return search
     }()
-    
+
     private lazy var dateLabel: UILabel = {
-        let label = UILabel ()
+        let label = UILabel()
         label.backgroundColor = UIColor(named: "BackgroundDatePicker")
         label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         label.textAlignment = .center
-        label.textColor = UIColor(named: "Black [day]")
+        label.textColor = .black
         label.translatesAutoresizingMaskIntoConstraints = false
         label.clipsToBounds = true
         label.layer.cornerRadius = 8
@@ -191,15 +191,15 @@ final class TrackerViewController: UIViewController {
             dateLabel.heightAnchor.constraint(equalToConstant: 34)
         ])
     }
-    
+
     private func formattedDate (from date: Date) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd.MM.yy"
         return dateFormatter.string(from: date)
     }
-    
+
     private func updateDateLabelTitle(with date: Date) {
-        let dateString = formattedDate (from: date)
+        let dateString = formattedDate(from: date)
         dateLabel.text = dateString
     }
 
@@ -328,7 +328,7 @@ extension TrackerViewController: UICollectionViewDataSource, UICollectionViewDel
                                                 withReuseIdentifier: HeaderCellView.reuseIdentifier,
                                                 for: indexPath) as? HeaderCellView else { return
             UICollectionReusableView() }
-        let titleCategory = categories[indexPath.section].title
+        let titleCategory = visibleCategories[indexPath.section].title
         view.configureHeader(title: titleCategory)
         return view
     }
@@ -336,8 +336,10 @@ extension TrackerViewController: UICollectionViewDataSource, UICollectionViewDel
 
 extension TrackerViewController: TrackerViewControllerDelegate {
     func createdTracker(tracker: Tracker, categoryTitle: String) {
+        print(categoryTitle)
         categories.append(TrackerCategory(title: categoryTitle, trackers: [tracker]))
         filterVisibleCategories(for: currentDate)
+        print(categories)
         collectionView.reloadData()
     }
 }
