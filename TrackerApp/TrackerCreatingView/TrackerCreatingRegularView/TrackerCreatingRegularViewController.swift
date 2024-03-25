@@ -155,12 +155,15 @@ final class TrackerCreatingRegularViewController: UIViewController {
     }
 
     @objc private func pushCreateButton() {
-        guard let trackerName = textField.text else { return }
+        guard let color = selectedColor,
+                let emoji = selectedEmoji,
+                let trackerName = textField.text else { return }
         let newTracker = Tracker(
             id: UUID(),
             name: trackerName,
-            color: UIColor(named: "Blue") ?? .blue,
-            emoji: emojiz.randomElement()!,
+            color: UIColor(named: colors[color]) ?? .blue,
+            colorString: colors[color],
+            emoji: emojiz[emoji],
             schedule: selectedSchedule)
         delegate?.createTracker(tracker: newTracker, categoryTitle: selectedCategory)
         dismiss(animated: true)
@@ -246,7 +249,6 @@ final class TrackerCreatingRegularViewController: UIViewController {
     }
 
     private func createButtonActivation() {
-        print(isCategorySelected && (textField.text != nil) && isEmojiSelected && isColorSelected)
         if isCategorySelected && (textField.text != nil) && isEmojiSelected && isColorSelected {
             createButton.isEnabled = true
             createButton.backgroundColor = UIColor(named: "Black [day]")
@@ -351,8 +353,6 @@ extension TrackerCreatingRegularViewController: UICollectionViewDelegate {
             if let selectedEmoji = selectedEmoji {
                 let previousIndex = IndexPath(item: selectedEmoji, section: 0)
                 if let cell = collectionView.cellForItem(at: previousIndex) as? EmojiColorCollectionViewCell {
-                    print("уборка")
-                    print(previousIndex)
                     cell.titleLabel.backgroundColor = .white
                 }
             }
@@ -364,8 +364,6 @@ extension TrackerCreatingRegularViewController: UICollectionViewDelegate {
             if let selectedColor = selectedColor {
                 let previousIndex = IndexPath(item: selectedColor, section: 1)
                 guard let cell = collectionView.cellForItem(at: previousIndex) as? EmojiColorCollectionViewCell else { return }
-                print("уборка цвета")
-                print(previousIndex)
                 cell.layer.borderWidth = 0
             }
             guard let cell = collectionView.cellForItem(at: indexPath) as? EmojiColorCollectionViewCell else { return }
@@ -376,7 +374,7 @@ extension TrackerCreatingRegularViewController: UICollectionViewDelegate {
             isColorSelected = true
             selectedColor = indexPath.row
         default:
-            print("ошибка ничего не выбрано")
+            break
         }
         createButtonActivation()
     }
@@ -428,7 +426,6 @@ extension TrackerCreatingRegularViewController: UICollectionViewDataSource {
             } else if indexPath.section == 1 {
                 view.titleLabel.text = "Цвет"
             }
-        print("HEADER")
             return view
         }
 }
