@@ -85,7 +85,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         mainView.backgroundColor = tracker.color
         countButton.backgroundColor = tracker.color
         updateCounterLabelText(completedDays: completedDays)
-        self.trackerID = tracker.id
+        self.trackerID = tracker.idTracker
         self.isCompleted = isCompletedToday
         self.indexPath = indexPath
         let image = isCompleted! ? UIImage(systemName: "checkmark") : UIImage(systemName: "plus")

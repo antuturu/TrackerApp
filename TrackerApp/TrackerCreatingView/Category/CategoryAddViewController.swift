@@ -12,11 +12,13 @@ protocol CategoryAddViewControllerDelegate: AnyObject {
 }
 
 final class CategoryAddViewController: UIViewController {
-
+    
     weak var delegate: CategoryAddViewControllerDelegate?
+    private let trackerCategoryStore: TrackerCategoryStoreProtocol = TrackerCategoryStore()
     private var dataForTableView: [String] = []
+    private var categories: [TrackerCategory] = []
     private var selectedCategoryIndex: Int?
-
+    
     private let addButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -29,7 +31,7 @@ final class CategoryAddViewController: UIViewController {
         button.addTarget(self, action: #selector(pushAddCategoryButton), for: .touchUpInside)
         return button
     }()
-
+    
     private let titleLabel: UILabel = {
         let text = UILabel()
         text.translatesAutoresizingMaskIntoConstraints = false
@@ -38,7 +40,7 @@ final class CategoryAddViewController: UIViewController {
         text.textColor = UIColor(named: "Black [day]")
         return text
     }()
-
+    
     private let tableView: UITableView = {
         let table = UITableView()
         table.translatesAutoresizingMaskIntoConstraints = false
@@ -50,14 +52,14 @@ final class CategoryAddViewController: UIViewController {
         table.register(CustomCellView.self, forCellReuseIdentifier: CustomCellView.reuseIdentifier)
         return table
     }()
-
+    
     private let imageView: UIImageView = {
         let image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
         image.image = UIImage(named: "errorTracker")
         return image
     }()
-
+    
     private let textNotFoundLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -68,20 +70,21 @@ final class CategoryAddViewController: UIViewController {
         label.textColor = UIColor(named: "Black [day]")
         return label
     }()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
         configureConstraints()
+        getCategories()
     }
-
+    
     @objc private func pushAddCategoryButton() {
         let newCategoryViewController = CreateNewCategoryViewController()
         newCategoryViewController.delegate = self
         let navigationController = UINavigationController(rootViewController: newCategoryViewController)
         present(navigationController, animated: true)
     }
-
+    
     private func configureView() {
         tableView.delegate = self
         tableView.dataSource = self
@@ -95,47 +98,57 @@ final class CategoryAddViewController: UIViewController {
             view.addSubview($0)
         }
     }
-
+    
     private func configureConstraints() {
-
+        
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             tableView.bottomAnchor.constraint(equalTo: addButton.topAnchor, constant: -24),
-
+            
             addButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             addButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             addButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
             addButton.heightAnchor.constraint(equalToConstant: 60),
-
+            
             imageView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
             imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             imageView.widthAnchor.constraint(equalToConstant: 80),
             imageView.heightAnchor.constraint(equalToConstant: 80),
-
+            
             textNotFoundLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 8),
             textNotFoundLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
     }
-
+    
     private func showEmptyStateImage() {
         imageView.isHidden = false
         textNotFoundLabel.isHidden = false
         tableView.isHidden = true
     }
-
+    
     private func hideEmptyStateImage() {
         imageView.isHidden = true
         textNotFoundLabel.isHidden = true
         tableView.isHidden = false
     }
-
+    
     private func updateEmptyStateVisibility() {
         if dataForTableView.isEmpty {
             showEmptyStateImage()
         } else {
             hideEmptyStateImage()
+        }
+    }
+    
+    private func getCategories() {
+        do {
+            categories = try trackerCategoryStore.getCategories()
+            dataForTableView = categories.map { $0.title }
+            updateEmptyStateVisibility()
+        } catch {
+            assertionFailure("Failed to get categories with \(error)")
         }
     }
 }
@@ -145,9 +158,10 @@ final class CategoryAddViewController: UIViewController {
 extension CategoryAddViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-
+        
         selectedCategoryIndex = indexPath.row
-
+        tableView.reloadData()
+        
         let selectedCategory = dataForTableView[indexPath.row]
         delegate?.didSelectCategory(selectedCategory)
         dismiss(animated: true)
@@ -160,10 +174,10 @@ extension CategoryAddViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return dataForTableView.count
     }
-
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: CustomCellView.reuseIdentifier,
-                                    for: indexPath) as? CustomCellView else { return UITableViewCell() }
+                                                       for: indexPath) as? CustomCellView else { return UITableViewCell() }
         cell.textLabel?.text = dataForTableView[indexPath.row]
         cell.backgroundColor = UIColor(named: "Background")
         cell.separatorInset = UIEdgeInsets(
@@ -172,15 +186,15 @@ extension CategoryAddViewController: UITableViewDataSource {
             bottom: 0,
             right: 16
         )
-
+        
         cell.layer.masksToBounds = true
         cell.layer.cornerRadius = 16.0
-
+        
         if dataForTableView.count == 1 {
             cell.layer.maskedCorners = [.layerMinXMinYCorner,
-                .layerMaxXMinYCorner,
-                .layerMinXMaxYCorner,
-                .layerMaxXMaxYCorner]
+                                        .layerMaxXMinYCorner,
+                                        .layerMinXMaxYCorner,
+                                        .layerMaxXMaxYCorner]
         } else {
             let numberOfRows = tableView.numberOfRows(inSection: indexPath.section)
             if indexPath.row == 0 {
@@ -191,7 +205,7 @@ extension CategoryAddViewController: UITableViewDataSource {
                 cell.layer.maskedCorners = []
             }
         }
-
+        
         if indexPath.row == selectedCategoryIndex {
             cell.accessoryType = .checkmark
         } else {
@@ -199,7 +213,7 @@ extension CategoryAddViewController: UITableViewDataSource {
         }
         return cell
     }
-
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 75
     }
@@ -208,19 +222,32 @@ extension CategoryAddViewController: UITableViewDataSource {
 // MARK: - NewCategoryViewControllerDelegate
 
 extension CategoryAddViewController: CreateNewCategoryViewControllerDelegate {
-    func didCreateCategory(_ category: String) {
-        if !dataForTableView.contains(category) {
-            dataForTableView.append(category)
-            tableView.invalidateIntrinsicContentSize()
-            tableView.layoutIfNeeded()
+    
+    func didCreateCategory(_ category: TrackerCategory) {
+        do {
+            try trackerCategoryStore.addCategory(category)
+            getCategories()
             tableView.reloadData()
             updateEmptyStateVisibility()
+        } catch {
+            assertionFailure("Failed to add category with \(error)")
         }
     }
-
+    
     func updatedCategoryList(_ categories: [String]) {
         dataForTableView = categories
         tableView.reloadData()
+        updateEmptyStateVisibility()
+    }
+}
+
+extension CategoryAddViewController: TrackerCategoryStoreDelegate {
+    func didUpdate(_ update: TrackerCategoryStoreUpdate) {
+        getCategories()
+        tableView.performBatchUpdates {
+            tableView.insertRows(at: update.insertedIndexPaths, with: .automatic)
+            tableView.deleteRows(at: update.deletedIndexPaths, with: .automatic)
+        }
         updateEmptyStateVisibility()
     }
 }
