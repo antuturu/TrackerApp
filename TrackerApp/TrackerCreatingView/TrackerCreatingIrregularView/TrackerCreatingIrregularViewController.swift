@@ -164,7 +164,7 @@ final class TrackerCreatingIrregularViewController: UIViewController {
         let weekdayArray = scheduleArray.map { $0.day }
         dismiss(animated: true)
         guard let color = selectedColor, let emoji = selectedEmoji else { return }
-        let tracker = Tracker(id: UUID(),
+        let tracker = Tracker(idTracker: UUID(),
                               name: textField.text ?? "",
                               color: UIColor(named: colors[color]) ?? .red,
                               colorString: colors[color],
@@ -342,7 +342,7 @@ extension TrackerCreatingIrregularViewController: UICollectionViewDelegate {
                 }
             }
             guard let cell = collectionView.cellForItem(at: indexPath) as? EmojiColorCollectionViewCell else { return }
-            cell.titleLabel.backgroundColor = UIColor(named: "Gray")
+            cell.titleLabel.backgroundColor = UIColor(named: "Light gray")
             selectedEmoji = indexPath.row
             isEmojiSelected = true
         case 1:
@@ -422,7 +422,19 @@ extension TrackerCreatingIrregularViewController: UICollectionViewDelegateFlowLa
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 52, height: 52)
+        let itemWidth: CGFloat
+        if collectionView.bounds.width < 430 {
+            itemWidth = 52
+            NSLayoutConstraint.activate([
+            collectionView.heightAnchor.constraint(equalToConstant: 450)
+            ])
+        } else {
+            NSLayoutConstraint.activate([
+            collectionView.heightAnchor.constraint(equalToConstant: 500)
+            ])
+            itemWidth = 60
+        }
+        return CGSize(width: itemWidth, height: itemWidth)
     }
     
     func collectionView(_ collectionView: UICollectionView,

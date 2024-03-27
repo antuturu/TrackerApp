@@ -165,7 +165,7 @@ final class TrackerViewController: UIViewController {
         ])
     }
     
-    private func formattedDate (from date: Date) -> String {
+    private func formattedDate(from date: Date) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd.MM.yy"
         return dateFormatter.string(from: date)
@@ -177,7 +177,11 @@ final class TrackerViewController: UIViewController {
     }
     
     private func isMatchRecord(model: TrackerRecord, with trackerId: UUID) -> Bool {
-        return model.id == trackerId && Calendar.current.isDate(model.date, inSameDayAs: currentDate)
+        let day = DateFormatter()
+        day.dateFormat = "dd.MM.yyyy"
+        let currentDayString = formattedDate(from: currentDate)
+        guard let formattedDay = day.date(from: currentDayString) else { return Bool() }
+        return model.id == trackerId && Calendar.current.isDate(model.date, inSameDayAs: formattedDay)
     }
     
     private func setEmptyStateVisibility(isHidden: Bool, for imageView: UIImageView, label: UILabel) {
@@ -292,9 +296,9 @@ extension TrackerViewController: UICollectionViewDataSource, UICollectionViewDel
         let cellData = visibleCategories
         let tracker = cellData[indexPath.section].trackers[indexPath.row]
         let isCompleted = completedTrackers.contains {
-            isMatchRecord(model: $0, with: tracker.id)
+            isMatchRecord(model: $0, with: tracker.idTracker)
         }
-        let completedDays = completedTrackers.filter { $0.id == tracker.id }.count
+        let completedDays = completedTrackers.filter { $0.id == tracker.idTracker }.count
         cell.delegate = self
         cell.configure(for: cell, tracker: tracker,
                        isCompletedToday: isCompleted,
@@ -323,6 +327,7 @@ extension TrackerViewController: TrackerViewControllerDelegate {
             categories.append(TrackerCategory(title: categoryTitle, trackers: [tracker]))
             filterVisibleCategories(for: currentDate)
             collectionView.reloadData()
+            reloadData()
         } catch {
             print("Failed to add tracker to Core Data: \(error)")
         }
@@ -331,19 +336,34 @@ extension TrackerViewController: TrackerViewControllerDelegate {
 
 extension TrackerViewController: TrackerCollectionViewCellDelegate {
     func completeTracker(id: UUID) {
-        guard currentDate <= Date() else {
+        
+        let day = DateFormatter()
+        day.dateFormat = "dd.MM.yyyy"
+        let currentDayString = formattedDate(from: currentDate)
+        let Day = formattedDate(from: Date())
+        guard let today = day.date(from: Day) else { return }
+        guard let formattedDay = day.date(from: currentDayString) else { return }
+        
+        guard formattedDay <= today else {
             return
         }
-        completedTrackers.append(TrackerRecord(id: id, date: currentDate))
-        try? trackerRecordStore.createRecord(id: id, date: currentDate)
+        
+        completedTrackers.append(TrackerRecord(id: id, date: formattedDay))
+        try? trackerRecordStore.createRecord(id: id, date: formattedDay)
+        print(currentDate)
         collectionView.reloadData()
     }
     
     func uncompleteTracker(id: UUID) {
+        let day = DateFormatter()
+        day.dateFormat = "dd.MM.yyyy"
+        let currentDayString = formattedDate(from: currentDate)
+        guard let formattedDay = day.date(from: currentDayString) else { return }
         completedTrackers.removeAll {
-            $0.id == id && Calendar.current.isDate($0.date, equalTo: currentDate, toGranularity: .day)
+            $0.id == id && Calendar.current.isDate($0.date, equalTo: formattedDay, toGranularity: .day)
         }
-        try? trackerRecordStore.deleteRecord(id: id, date: currentDate)
+        print(currentDate)
+        try? trackerRecordStore.deleteRecord(id: id, date: formattedDay)
         collectionView.reloadData()
     }
 }

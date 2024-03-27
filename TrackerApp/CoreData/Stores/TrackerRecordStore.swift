@@ -48,7 +48,7 @@ final class TrackerRecordStore: NSObject, TrackerRecordStoreProtocol {
         request.returnsObjectsAsFaults = false
         request.predicate = NSPredicate(
             format: "%K = %@",
-            "id", id as CVarArg
+            #keyPath(TrackerCoreData.idTracker), id as CVarArg
         )
         return try context.fetch(request).first
     }
@@ -58,8 +58,8 @@ final class TrackerRecordStore: NSObject, TrackerRecordStoreProtocol {
         request.returnsObjectsAsFaults = false
         request.predicate = NSPredicate(
             format: "%K = %@ AND %K = %@",
-            "\(TrackerRecordCoreData.self).tracker.id", id as CVarArg,
-            "\(TrackerRecordCoreData.self).date", date as CVarArg
+            #keyPath(TrackerRecordCoreData.tracker.idTracker), id as CVarArg,
+            #keyPath(TrackerRecordCoreData.date), date as CVarArg
         )
         return try context.fetch(request).first
     }
@@ -91,6 +91,7 @@ final class TrackerRecordStore: NSObject, TrackerRecordStoreProtocol {
         guard let trackerRecordCoreData = try fetchTrackerRecordCoreData(for: id, and: date) else {
             throw TrackerRecordStoreErrors.failedToFetchRecord
         }
+        print(trackerRecordCoreData)
         context.delete(trackerRecordCoreData)
         try saveContext()
     }

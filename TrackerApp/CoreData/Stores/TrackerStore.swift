@@ -129,7 +129,7 @@ extension TrackerStore: TrackerStoreProtocol {
     }
     
     func fetchTracker(_ trackerCoreData: TrackerCoreData) throws -> Tracker {
-        guard let id = trackerCoreData.id,
+        guard let id = trackerCoreData.idTracker,
               let name = trackerCoreData.name,
               let colorString = trackerCoreData.color,
               let emoji = trackerCoreData.emoji else {
@@ -140,7 +140,7 @@ extension TrackerStore: TrackerStoreProtocol {
         let schedule = WeekDayModel.calculateScheduleArray(from: trackerCoreData.schedule)
         
         return Tracker(
-            id: id,
+            idTracker: id,
             name: name,
             color: color,
             colorString: colorString,
@@ -153,7 +153,7 @@ extension TrackerStore: TrackerStoreProtocol {
         let trackerCategoryCoreData = try trackerCategoryStore.fetchCategoryCoreData(for: category)
         let trackerCoreData = TrackerCoreData(context: context)
         
-        trackerCoreData.id = tracker.id
+        trackerCoreData.idTracker = tracker.idTracker
         trackerCoreData.name = tracker.name
         trackerCoreData.color = tracker.colorString
         trackerCoreData.emoji = tracker.emoji
