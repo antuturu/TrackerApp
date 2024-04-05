@@ -14,10 +14,8 @@ protocol CategoryAddViewControllerDelegate: AnyObject {
 final class CategoryAddViewController: UIViewController {
     
     weak var delegate: CategoryAddViewControllerDelegate?
-    private let trackerCategoryStore: TrackerCategoryStoreProtocol = TrackerCategoryStore()
-    private var dataForTableView: [String] = []
-    private var categories: [TrackerCategory] = []
     private var selectedCategoryIndex: Int?
+    private var viewModel: CategoryAddNewViewModel!
     
     private let addButton: UIButton = {
         let button = UIButton()
@@ -73,9 +71,14 @@ final class CategoryAddViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        viewModel = CategoryAddNewViewModel(categoryStore: TrackerCategoryStore())
+        viewModel.updateHandler = { [weak self] in
+            self?.tableView.reloadData()
+        }
         configureView()
         configureConstraints()
         getCategories()
+        updateEmptyStateVisibility()
     }
     
     @objc private func pushAddCategoryButton() {
@@ -86,6 +89,7 @@ final class CategoryAddViewController: UIViewController {
     }
     
     private func configureView() {
+        
         tableView.delegate = self
         tableView.dataSource = self
         navigationItem.titleView = titleLabel
@@ -135,7 +139,7 @@ final class CategoryAddViewController: UIViewController {
     }
     
     private func updateEmptyStateVisibility() {
-        if dataForTableView.isEmpty {
+        if viewModel.numberOfCategories() == 0 {
             showEmptyStateImage()
         } else {
             hideEmptyStateImage()
@@ -143,13 +147,7 @@ final class CategoryAddViewController: UIViewController {
     }
     
     private func getCategories() {
-        do {
-            categories = try trackerCategoryStore.getCategories()
-            dataForTableView = categories.map { $0.title }
-            updateEmptyStateVisibility()
-        } catch {
-            assertionFailure("Failed to get categories with \(error)")
-        }
+        viewModel.fetchCategories()
     }
 }
 
@@ -162,9 +160,17 @@ extension CategoryAddViewController: UITableViewDelegate {
         selectedCategoryIndex = indexPath.row
         tableView.reloadData()
         
-        let selectedCategory = dataForTableView[indexPath.row]
-        delegate?.didSelectCategory(selectedCategory)
+        let selectedCategory = viewModel.category(at: indexPath.row)
+        delegate?.didSelectCategory(selectedCategory.title)
         dismiss(animated: true)
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if indexPath.row == tableView.numberOfRows(inSection: indexPath.section) - 1 {
+            cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
+        } else {
+            cell.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        }
     }
 }
 
@@ -172,13 +178,14 @@ extension CategoryAddViewController: UITableViewDelegate {
 
 extension CategoryAddViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dataForTableView.count
+        return viewModel.numberOfCategories()
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: CustomCellView.reuseIdentifier,
                                                        for: indexPath) as? CustomCellView else { return UITableViewCell() }
-        cell.textLabel?.text = dataForTableView[indexPath.row]
+        let category = viewModel.category(at: indexPath.row)
+        cell.textLabel?.text = category.title
         cell.backgroundColor = UIColor(named: "Background")
         cell.separatorInset = UIEdgeInsets(
             top: 0,
@@ -190,7 +197,7 @@ extension CategoryAddViewController: UITableViewDataSource {
         cell.layer.masksToBounds = true
         cell.layer.cornerRadius = 16.0
         
-        if dataForTableView.count == 1 {
+        if viewModel.numberOfCategories() == 1 {
             cell.layer.maskedCorners = [.layerMinXMinYCorner,
                                         .layerMaxXMinYCorner,
                                         .layerMinXMaxYCorner,
@@ -224,21 +231,12 @@ extension CategoryAddViewController: UITableViewDataSource {
 extension CategoryAddViewController: CreateNewCategoryViewControllerDelegate {
     
     func didCreateCategory(_ category: TrackerCategory) {
-        do {
-            try trackerCategoryStore.addCategory(category)
-            getCategories()
-            tableView.reloadData()
-            updateEmptyStateVisibility()
-        } catch {
-            assertionFailure("Failed to add category with \(error)")
-        }
-    }
-    
-    func updatedCategoryList(_ categories: [String]) {
-        dataForTableView = categories
+        viewModel.addCategory(category)
         tableView.reloadData()
         updateEmptyStateVisibility()
     }
+    
+    
 }
 
 extension CategoryAddViewController: TrackerCategoryStoreDelegate {

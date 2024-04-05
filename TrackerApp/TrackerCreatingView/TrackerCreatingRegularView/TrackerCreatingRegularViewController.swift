@@ -253,7 +253,7 @@ final class TrackerCreatingRegularViewController: UIViewController {
     }
     
     private func createButtonActivation() {
-        if isCategorySelected && (textField.text != nil) && isEmojiSelected && isColorSelected && isScheduleSelected {
+        if isCategorySelected && (textField.text != nil) && (textField.text != "") && isEmojiSelected && isColorSelected && isScheduleSelected {
             createButton.isEnabled = true
             createButton.backgroundColor = UIColor(named: "Black [day]")
         } else {
@@ -332,15 +332,10 @@ extension TrackerCreatingRegularViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField,
                    shouldChangeCharactersIn range: NSRange,
                    replacementString string: String) -> Bool {
-        if let text = textField.text, !text.isEmpty {
-            createButton.isEnabled = true
-            createButton.backgroundColor = UIColor(named: "Black [day]")
-        } else {
-            createButton.isEnabled = false
-            createButton.backgroundColor = UIColor(named: "Gray")
-        }
+        createButtonActivation()
         return true
     }
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
