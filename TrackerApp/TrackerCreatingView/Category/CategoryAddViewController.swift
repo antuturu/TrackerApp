@@ -8,13 +8,13 @@
 import UIKit
 
 protocol CategoryAddViewControllerDelegate: AnyObject {
-    func didSelectCategory(_ category: String)
+    func didSelectCategory(_ category: String, index: Int?)
 }
 
 final class CategoryAddViewController: UIViewController {
     
     weak var delegate: CategoryAddViewControllerDelegate?
-    private var selectedCategoryIndex: Int?
+    var selectedCategoryIndex: Int?
     private var viewModel: CategoryAddNewViewModel!
     
     private let addButton: UIButton = {
@@ -161,7 +161,7 @@ extension CategoryAddViewController: UITableViewDelegate {
         tableView.reloadData()
         
         let selectedCategory = viewModel.category(at: indexPath.row)
-        delegate?.didSelectCategory(selectedCategory.title)
+        delegate?.didSelectCategory(selectedCategory.title, index: selectedCategoryIndex)
         dismiss(animated: true)
     }
     

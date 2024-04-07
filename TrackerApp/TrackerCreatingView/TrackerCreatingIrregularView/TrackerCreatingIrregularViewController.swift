@@ -13,6 +13,7 @@ final class TrackerCreatingIrregularViewController: UIViewController {
     
     private let dataForTableView = "Категория"
     private var selectedCategory = String()
+    private var selectedCategotyIndex:Int?
     private var isCategorySelected: Bool = false
     private var isTextEntered: Bool = false
     private var isEmojiSelected: Bool = false
@@ -272,6 +273,7 @@ extension TrackerCreatingIrregularViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         guard indexPath.row == 0 else { return }
         let categoryViewController = CategoryAddViewController()
+        categoryViewController.selectedCategoryIndex = selectedCategotyIndex
         categoryViewController.delegate = self
         let navigationController = UINavigationController(rootViewController: categoryViewController)
         present(navigationController, animated: true)
@@ -324,8 +326,10 @@ extension TrackerCreatingIrregularViewController: UITextFieldDelegate {
 // MARK: - CategoryAddViewControllerDelegate
 
 extension TrackerCreatingIrregularViewController: CategoryAddViewControllerDelegate {
-    func didSelectCategory(_ category: String) {
+    
+    func didSelectCategory(_ category: String, index: Int?) {
         updateCategory(category)
+        selectedCategotyIndex = index
     }
 }
 

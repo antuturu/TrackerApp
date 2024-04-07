@@ -28,17 +28,6 @@ class OnboardingViewController: UIPageViewController, UIPageViewControllerDataSo
         return pageControl
     }()
     
-    private let buttonNext: UIButton = {
-        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = UIColor(named: "Black [day]")
-        button.layer.cornerRadius = 16
-        button.setTitle("Вот это технологии!", for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        button.addTarget(self, action: #selector(pushButtonNext), for: .touchUpInside)
-        return button
-    }()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         configure()
@@ -66,27 +55,16 @@ class OnboardingViewController: UIPageViewController, UIPageViewControllerDataSo
         fatalError("init(coder:) has not been implemented")
     }
     
-    @objc private func pushButtonNext() {
-        UserDefaults.standard.set("true", forKey: "Logined")
-        let tabBarView = TabBarController()
-        tabBarView.modalPresentationStyle = .fullScreen
-        present(tabBarView, animated: true, completion: nil)
-    }
+    
     
     private func configure() {
-        [pageControl,
-         buttonNext
+        [pageControl
         ].forEach {
             view.addSubview($0)
         }
         NSLayoutConstraint.activate([
-            buttonNext.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -50),
-            buttonNext.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            buttonNext.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            buttonNext.heightAnchor.constraint(equalToConstant: 60),
-            
             pageControl.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            pageControl.bottomAnchor.constraint(equalTo: buttonNext.topAnchor, constant: -24)
+            pageControl.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -134)
         ])
     }
     

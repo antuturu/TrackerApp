@@ -29,6 +29,17 @@ final class OnBoardingPageViewController: UIViewController {
         return label
     }()
     
+    private lazy var buttonNext: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.backgroundColor = UIColor(named: "Black [day]")
+        button.layer.cornerRadius = 16
+        button.setTitle("Вот это технологии!", for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        button.addTarget(self, action: #selector(pushButtonNext), for: .touchUpInside)
+        return button
+    }()
+    
     init(imageName: String, labelText: String) {
         self.imageName = imageName
         self.labelText = labelText
@@ -44,12 +55,25 @@ final class OnBoardingPageViewController: UIViewController {
         configure()
     }
     
+    @objc private func pushButtonNext() {
+        UserDefaults.standard.set("true", forKey: "Logined")
+        let tabBarView = TabBarController()
+        tabBarView.modalPresentationStyle = .fullScreen
+        present(tabBarView, animated: true, completion: nil)
+    }
+    
     private func configure() {
         backgroundImageView.image = UIImage(named: imageName)
         view.addSubview(backgroundImageView)
         view.addSubview(textLabel)
+        view.addSubview(buttonNext)
         
         NSLayoutConstraint.activate([
+            buttonNext.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -50),
+            buttonNext.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            buttonNext.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            buttonNext.heightAnchor.constraint(equalToConstant: 60),
+            
             backgroundImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             backgroundImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor),

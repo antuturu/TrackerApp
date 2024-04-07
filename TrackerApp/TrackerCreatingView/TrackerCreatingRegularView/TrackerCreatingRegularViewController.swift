@@ -16,6 +16,7 @@ final class TrackerCreatingRegularViewController: UIViewController {
     private let dataForTableView = ["Категория", "Расписание"]
     private var selectedSchedule: [WeekDayModel] = []
     private var selectedCategory = String()
+    private var selectedCategotyIndex:Int?
     private var isCategorySelected: Bool = false
     private var isTextEntered: Bool = false
     private var isEmojiSelected: Bool = false
@@ -286,6 +287,7 @@ extension TrackerCreatingRegularViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         if indexPath.row == 0 {
             let categoryViewController = CategoryAddViewController()
+            categoryViewController.selectedCategoryIndex = selectedCategotyIndex
             categoryViewController.delegate = self
             let navigationController = UINavigationController(rootViewController: categoryViewController)
             present(navigationController, animated: true)
@@ -345,8 +347,9 @@ extension TrackerCreatingRegularViewController: UITextFieldDelegate {
 // MARK: - CategoryViewControllerDelegate
 
 extension TrackerCreatingRegularViewController: CategoryAddViewControllerDelegate {
-    func didSelectCategory(_ category: String) {
+    func didSelectCategory(_ category: String, index: Int?) {
         updateCategory(category)
+        selectedCategotyIndex = index
     }
 }
 

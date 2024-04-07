@@ -8,7 +8,6 @@
 import Foundation
 
 final class CategoryAddNewViewModel {
-    typealias Binding<T> = (T) -> Void
     private let categoryStore: TrackerCategoryStoreProtocol
     private var categories: [TrackerCategory] = []
     
