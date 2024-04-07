@@ -242,14 +242,14 @@ final class TrackerViewController: UIViewController {
     }
     
     private func reloadData() {
-        do {
-            categories = try trackerCategoryStore.getCategories()
-            completedTrackers = try trackerRecordStore.fetchRecords()
-        } catch {
-            assertionFailure("Failed to get categories with \(error)")
-        }
         filterVisibleCategories(for: currentDate)
+        trackerCategoryStore.getCategories { [weak self] categories in
+            self?.categories = categories
+            print("Все ок")
+            self?.filterVisibleCategories(for: self?.currentDate ?? Date())
+        }
     }
+    
 }
 
 extension TrackerViewController: UICollectionViewDelegateFlowLayout {

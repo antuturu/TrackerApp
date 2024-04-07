@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="uSY-Gs-A8U">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22684"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -13,16 +13,12 @@
         <!--Tab Bar Controller-->
         <scene sceneID="E5z-Dz-ibE">
             <objects>
-                <tabBarController id="uSY-Gs-A8U" sceneMemberID="viewController">
+                <tabBarController id="uSY-Gs-A8U" customClass="TabBarController" customModule="TrackerApp" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="zcc-0e-Xaz">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBar>
-                    <connections>
-                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="viewControllers" id="NOu-yH-RIc"/>
-                        <segue destination="fqa-fz-NF3" kind="relationship" relationship="viewControllers" id="l9A-vO-lJr"/>
-                    </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ay1-9m-Qc6" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -31,7 +27,7 @@
         <!--TrackerViewController-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" userLabel="TrackerViewController" customClass="TrackerViewController" customModule="TrackerApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="TrackersView" id="BYZ-38-t0r" userLabel="TrackerViewController" customClass="TrackerViewController" customModule="TrackerApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -66,13 +62,13 @@
                                 </connections>
                             </datePicker>
                             <stackView hidden="YES" opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="4uH-CO-9sI">
-                                <rect key="frame" x="123.33333333333333" y="414" width="146.33333333333337" height="102.33333333333337"/>
+                                <rect key="frame" x="123.33333333333333" y="438.66666666666669" width="146.33333333333337" height="102.33333333333331"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="errorTracker" translatesAutoresizingMaskIntoConstraints="NO" id="v29-TE-hLK">
                                         <rect key="frame" x="33.333333333333329" y="0.0" width="80" height="80"/>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Что будем отслеживать?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TSE-6S-4DU">
-                                        <rect key="frame" x="0.0" y="88" width="146.33333333333334" height="14.333333333333329"/>
+                                        <rect key="frame" x="0.0" y="87.999999999999943" width="146.33333333333334" height="14.333333333333329"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                         <color key="textColor" name="Black [day]"/>
                                         <nil key="highlightedColor"/>
@@ -80,13 +76,13 @@
                                 </subviews>
                             </stackView>
                             <stackView hidden="YES" opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="qCU-ch-PXJ">
-                                <rect key="frame" x="139.66666666666666" y="414" width="113.66666666666666" height="102.33333333333337"/>
+                                <rect key="frame" x="139.66666666666666" y="438.66666666666669" width="113.66666666666666" height="102.33333333333331"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="errorNotFound" translatesAutoresizingMaskIntoConstraints="NO" id="P7p-6f-O4C">
                                         <rect key="frame" x="17" y="0.0" width="80" height="80"/>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ничего не найдено" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0oC-7E-UwT">
-                                        <rect key="frame" x="0.0" y="88" width="113.66666666666667" height="14.333333333333329"/>
+                                        <rect key="frame" x="0.0" y="87.999999999999943" width="113.66666666666667" height="14.333333333333329"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                         <color key="textColor" name="Black [day]"/>
                                         <nil key="highlightedColor"/>
@@ -96,6 +92,7 @@
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" name="White"/>
+                        <accessibility key="accessibilityConfiguration" identifier="TrackersView"/>
                         <constraints>
                             <constraint firstItem="x4c-LE-rzA" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="6" id="1LJ-6a-tio"/>
                             <constraint firstItem="x4c-LE-rzA" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="1" id="K5Z-xo-lEQ"/>
@@ -125,7 +122,7 @@
         <!--Statistic View Controller-->
         <scene sceneID="hya-ad-1dy">
             <objects>
-                <viewController id="fqa-fz-NF3" userLabel="Statistic View Controller" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="StatisticView" id="fqa-fz-NF3" userLabel="Statistic View Controller" customClass="StatisticsViewController" customModule="TrackerApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="UYy-zp-fhW">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -137,6 +134,14 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KTi-YI-bTG" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-425" y="387"/>
+        </scene>
+        <!--OnboardingViewController-->
+        <scene sceneID="OpW-fe-ATs">
+            <objects>
+                <pageViewController autoresizesArchivedViewToFullSize="NO" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="9if-ti-NRL" userLabel="OnboardingViewController" customClass="OnboardingViewController" customModule="TrackerApp" customModuleProvider="target" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="PWz-ZH-TQk" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2839" y="-21"/>
         </scene>
     </scenes>
     <resources>

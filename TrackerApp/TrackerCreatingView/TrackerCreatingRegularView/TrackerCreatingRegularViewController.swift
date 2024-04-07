@@ -16,6 +16,7 @@ final class TrackerCreatingRegularViewController: UIViewController {
     private let dataForTableView = ["Категория", "Расписание"]
     private var selectedSchedule: [WeekDayModel] = []
     private var selectedCategory = String()
+    private var selectedCategotyIndex:Int?
     private var isCategorySelected: Bool = false
     private var isTextEntered: Bool = false
     private var isEmojiSelected: Bool = false
@@ -253,7 +254,7 @@ final class TrackerCreatingRegularViewController: UIViewController {
     }
     
     private func createButtonActivation() {
-        if isCategorySelected && (textField.text != nil) && isEmojiSelected && isColorSelected && isScheduleSelected {
+        if isCategorySelected && (textField.text != nil) && (textField.text != "") && isEmojiSelected && isColorSelected && isScheduleSelected {
             createButton.isEnabled = true
             createButton.backgroundColor = UIColor(named: "Black [day]")
         } else {
@@ -286,6 +287,7 @@ extension TrackerCreatingRegularViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         if indexPath.row == 0 {
             let categoryViewController = CategoryAddViewController()
+            categoryViewController.selectedCategoryIndex = selectedCategotyIndex
             categoryViewController.delegate = self
             let navigationController = UINavigationController(rootViewController: categoryViewController)
             present(navigationController, animated: true)
@@ -332,15 +334,10 @@ extension TrackerCreatingRegularViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField,
                    shouldChangeCharactersIn range: NSRange,
                    replacementString string: String) -> Bool {
-        if let text = textField.text, !text.isEmpty {
-            createButton.isEnabled = true
-            createButton.backgroundColor = UIColor(named: "Black [day]")
-        } else {
-            createButton.isEnabled = false
-            createButton.backgroundColor = UIColor(named: "Gray")
-        }
+        createButtonActivation()
         return true
     }
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
@@ -350,8 +347,9 @@ extension TrackerCreatingRegularViewController: UITextFieldDelegate {
 // MARK: - CategoryViewControllerDelegate
 
 extension TrackerCreatingRegularViewController: CategoryAddViewControllerDelegate {
-    func didSelectCategory(_ category: String) {
+    func didSelectCategory(_ category: String, index: Int?) {
         updateCategory(category)
+        selectedCategotyIndex = index
     }
 }
 

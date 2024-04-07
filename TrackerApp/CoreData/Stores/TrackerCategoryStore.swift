@@ -26,9 +26,9 @@ protocol TrackerCategoryStoreDelegate: AnyObject {
 
 protocol TrackerCategoryStoreProtocol {
     func setDelegate(_ delegate: TrackerCategoryStoreDelegate)
-    func getCategories() throws -> [TrackerCategory]
+    func getCategories(completion: @escaping ([TrackerCategory]) -> Void)
     func fetchCategoryCoreData(for category: TrackerCategory) throws -> TrackerCategoryCoreData
-    func addCategory(_ category: TrackerCategory) throws
+    func addCategory(_ category: TrackerCategory, completion: @escaping (Error?) -> Void)
 }
 
 final class TrackerCategoryStore: NSObject {
@@ -67,6 +67,14 @@ final class TrackerCategoryStore: NSObject {
     init(context: NSManagedObjectContext) {
         self.context = context
         super.init()
+    }
+    
+    private func fetchCategories() throws -> [TrackerCategory] {
+        guard let objects = fetchedResultsController.fetchedObjects else {
+            throw TrackerCategoryStoreError.failedToFetchCategory
+        }
+        let categories = try objects.map { try convertToTrackerCategory(from: $0) }
+        return categories
     }
     
     private func convertToTrackerCategory(from trackerCategoryCoreData: TrackerCategoryCoreData) throws -> TrackerCategory {
@@ -113,12 +121,14 @@ extension TrackerCategoryStore: TrackerCategoryStoreProtocol {
         self.delegate = delegate
     }
     
-    func getCategories() throws -> [TrackerCategory] {
-        guard let objects = fetchedResultsController.fetchedObjects else {
-            throw TrackerCategoryStoreError.failedToFetchCategory
+    func getCategories(completion: @escaping ([TrackerCategory]) -> Void) {
+        do {
+            let categories = try fetchCategories()
+            completion(categories)
+        } catch {
+            print("Failed to fetch categories with error: \(error)")
+            completion([])
         }
-        let categories = try objects.map { try convertToTrackerCategory(from: $0) }
-        return categories
     }
     
     func fetchCategoryCoreData(for category: TrackerCategory) throws -> TrackerCategoryCoreData {
@@ -133,12 +143,18 @@ extension TrackerCategoryStore: TrackerCategoryStoreProtocol {
         return categoryCoreData
     }
     
-    func addCategory(_ category: TrackerCategory) throws {
-        try ensureUniqueCategoryTitle(with: category.title)
-        let categoryCoreData = TrackerCategoryCoreData(context: context)
-        categoryCoreData.title = category.title
-        categoryCoreData.trackers = NSSet()
-        try saveContext()
+    func addCategory(_ category: TrackerCategory, completion: @escaping (Error?) -> Void) {
+        do {
+            try ensureUniqueCategoryTitle(with: category.title)
+            let categoryCoreData = TrackerCategoryCoreData(context: context)
+            categoryCoreData.title = category.title
+            categoryCoreData.trackers = NSSet()
+            try saveContext()
+            completion(nil)
+        } catch {
+            print("Failed to add category with error: \(error)")
+            completion(error)
+        }
     }
 }
 
