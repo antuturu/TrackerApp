@@ -13,13 +13,13 @@ protocol TrackerCollectionViewCellDelegate: AnyObject {
 }
 
 final class TrackerCollectionViewCell: UICollectionViewCell {
-
+    
     var isCompleted: Bool?
     var trackerID: UUID?
     var indexPath: IndexPath?
-
+    
     weak var delegate: TrackerCollectionViewCellDelegate?
-
+    
     private let mainView: UIView = {
         let view = UIView()
         view.layer.cornerRadius = 16
@@ -46,7 +46,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         label.numberOfLines = 0
         return label
     }()
-
+    
     private let dayLabel: UILabel = {
         let label = UILabel()
         label.text = "Задание"
@@ -56,7 +56,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         label.numberOfLines = 0
         return label
     }()
-
+    
     private let countButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -67,14 +67,14 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         button.addTarget(self, action: #selector(countButtonTapped), for: .touchUpInside)
         return button
     }()
-
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
-
+        
         addSubviews()
         configureConstraints()
     }
-
+    
     func configure(for: UICollectionViewCell,
                    tracker: Tracker,
                    isCompletedToday: Bool,
@@ -96,14 +96,14 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         for view in self.countButton.subviews {
             view.removeFromSuperview()
         }
-
+        
         countButton.addSubview(imageButton)
         NSLayoutConstraint.activate([
             imageButton.centerXAnchor.constraint(equalTo: countButton.centerXAnchor),
             imageButton.centerYAnchor.constraint(equalTo: countButton.centerYAnchor)
         ])
     }
-
+    
     @objc private func countButtonTapped() {
         guard let isCompleted = isCompleted,
               let trackerID = trackerID
@@ -116,7 +116,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
             self.delegate?.completeTracker(id: trackerID)
         }
     }
-
+    
     private func addSubviews() {
         contentView.addSubview(mainView)
         contentView.addSubview(dayLabel)
@@ -125,51 +125,43 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         mainView.addSubview(emojiLabel)
         mainView.addSubview(titleLabel)
     }
-
+    
     private func configureConstraints() {
         NSLayoutConstraint.activate([
             mainView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             mainView.topAnchor.constraint(equalTo: contentView.topAnchor),
             mainView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             mainView.heightAnchor.constraint(equalToConstant: 90),
-
+            
             emojiLabel.leadingAnchor.constraint(equalTo: mainView.leadingAnchor, constant: 12),
             emojiLabel.topAnchor.constraint(equalTo: mainView.topAnchor, constant: 12),
             emojiLabel.widthAnchor.constraint(equalToConstant: 24),
             emojiLabel.heightAnchor.constraint(equalToConstant: 24),
-
+            
             titleLabel.bottomAnchor.constraint(equalTo: mainView.bottomAnchor, constant: -12),
             titleLabel.leadingAnchor.constraint(equalTo: mainView.leadingAnchor, constant: 12),
             titleLabel.trailingAnchor.constraint(equalTo: mainView.trailingAnchor, constant: -12),
-
+            
             dayLabel.topAnchor.constraint(equalTo: mainView.bottomAnchor, constant: 16),
             dayLabel.leadingAnchor.constraint(equalTo: mainView.leadingAnchor, constant: 12),
             dayLabel.heightAnchor.constraint(equalToConstant: 18),
-
+            
             countButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
             countButton.topAnchor.constraint(equalTo: mainView.bottomAnchor, constant: 8),
             countButton.widthAnchor.constraint(equalToConstant: 34),
             countButton.heightAnchor.constraint(equalToConstant: 34)
         ])
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     private func updateCounterLabelText(completedDays: Int) {
-        let remainder = completedDays % 100
-        if (11...14).contains(remainder) {
-            dayLabel.text = "\(completedDays) дней"
-        } else {
-            switch remainder % 10 {
-            case 1:
-                dayLabel.text = "\(completedDays) день"
-            case 2...4:
-                dayLabel.text = "\(completedDays) дня"
-            default:
-                dayLabel.text = "\(completedDays) дней"
-            }
-        }
+        let formattedString = String.localizedStringWithFormat(
+            NSLocalizedString("StringKey", comment: ""),
+            completedDays
+        )
+        dayLabel.text = formattedString
     }
 }
