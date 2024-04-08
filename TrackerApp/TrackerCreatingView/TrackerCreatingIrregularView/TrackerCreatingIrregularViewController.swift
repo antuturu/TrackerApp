@@ -11,7 +11,7 @@ final class TrackerCreatingIrregularViewController: UIViewController {
     
     weak var delegate: TrackerCreatingViewControllerProtocol?
     
-    private let dataForTableView = "Категория"
+    private let dataForTableView = NSLocalizedString("categoryTable", comment: "")
     private var selectedCategory = String()
     private var selectedCategotyIndex:Int?
     private var isCategorySelected: Bool = false
@@ -51,7 +51,7 @@ final class TrackerCreatingIrregularViewController: UIViewController {
         textField.layer.masksToBounds = true
         textField.font = UIFont.systemFont(ofSize: 17)
         textField.addLeftPadding(16)
-        textField.placeholder = "Введите название трекера"
+        textField.placeholder = NSLocalizedString("trackerCreating.namePlaceHolder", comment: "")
         textField.clearButtonMode = .whileEditing
         textField.returnKeyType = .done
         textField.enablesReturnKeyAutomatically = true
@@ -62,7 +62,7 @@ final class TrackerCreatingIrregularViewController: UIViewController {
     private let titleLabel: UILabel = {
         let text = UILabel()
         text.translatesAutoresizingMaskIntoConstraints = false
-        text.text = "Новое нерегулярное событие"
+        text.text = NSLocalizedString("trackerCreatingIrregular.title", comment: "")
         text.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         text.textColor = UIColor(named: "Black [day]")
         return text
@@ -93,7 +93,8 @@ final class TrackerCreatingIrregularViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = UIColor(named: "White")
         button.setTitleColor(UIColor(named: "Red"), for: .normal)
-        button.setTitle("Отменить", for: .normal)
+        let localizedText = NSLocalizedString("trackerCreating.cancelButton", comment: "")
+        button.setTitle(localizedText, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.layer.cornerRadius = 16
         button.layer.masksToBounds = true
@@ -109,7 +110,8 @@ final class TrackerCreatingIrregularViewController: UIViewController {
         button.backgroundColor = UIColor(named: "Black [day]")
         button.layer.cornerRadius = 16
         button.layer.masksToBounds = true
-        button.setTitle("Создать", for: .normal)
+        let localizedText = NSLocalizedString("trackerCreating.createButton", comment: "")
+        button.setTitle(localizedText, for: .normal)
         button.setTitleColor(UIColor(named: "White"), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.addTarget(self, action: #selector(pushCreateButton), for: .touchUpInside)
@@ -413,7 +415,7 @@ extension TrackerCreatingIrregularViewController: UICollectionViewDataSource {
         if indexPath.section == 0 {
             view.titleLabel.text = "Emoji"
         } else if indexPath.section == 1 {
-            view.titleLabel.text = "Цвет"
+            view.titleLabel.text = NSLocalizedString("collectionView.cellTitleColor", comment: "")
         }
         return view
     }

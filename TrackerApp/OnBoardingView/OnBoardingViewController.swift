@@ -11,8 +11,8 @@ class OnboardingViewController: UIPageViewController, UIPageViewControllerDataSo
     
     private lazy var pages: [UIViewController] = {
         
-        let first = OnBoardingPageViewController(imageName: "onBoardingBackground1.png", labelText: "Отслеживайте только то, что хотите")
-        let second = OnBoardingPageViewController(imageName: "onBoardingBackground2.png", labelText: "Даже если это не литры воды и йога")
+        let first = OnBoardingPageViewController(imageName: "onBoardingBackground1.png", labelText: NSLocalizedString("onboarding.titleFirst", comment: "Text displayed on first onboarding page"))
+        let second = OnBoardingPageViewController(imageName: "onBoardingBackground2.png", labelText: NSLocalizedString("onboarding.titleSecond", comment: "Text displayed on second onboarding page"))
         return [first, second]
     }()
     

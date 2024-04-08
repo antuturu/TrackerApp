@@ -1,0 +1,49 @@
+/*
+  Localizable.strings
+  TrackerApp
+
+  Created by Александр Акимов on 07.04.2024.
+  
+*/
+"onboarding.titleFirst" = "Отслеживайте только то, что хотите";
+"onboarding.titleSecond" = "Даже если это не литры воды и йога";
+"onboarding.button" = "Вот это технологии!";
+"trackerViewController.serchPlaceholder" = "Поиск";
+"trackerViewController.title" = "Трекеры";
+"trackerViewController.emptyTitle" = "Что будем отслеживать?";
+"trackerViewController.noSearchResultTitle" = "Ничего не найдено";
+"tabBar.trackers" = "Трекеры";
+"tabBar.statistic" = "Статистика";
+"trackerCreatingView.title" = "Создание трекера";
+"trackerCreatingView.regularButton" = "Привычка";
+"trackerCreatingView.irregularButton" = "Нерегулярное событие";
+"categoryTable" = "Категория";
+"scheduleTable" = "Расписание";
+"trackerCreating.namePlaceHolder" = "Введите название трекера";
+"trackerCreating.cancelButton" = "Отменить";
+"trackerCreating.createButton" = "Создать";
+"trackerCreatingRegular.title" = "Новая привычка";
+"trackerCreatingIrregular.title" = "Новое нерегулярное событие";
+"collectionView.cellTitleColor" = "Цвет";
+"categoryView.title" = "Категории";
+"categoryView.addButton" = "Добавить категорию";
+"categoryView.textNotFound" = "Привычки и события можно\nобъединить по смыслу";
+"categoryCreatingView.title" = "Новая категория";
+"categoryCreatingView.placeholder" = "Введите название категории";
+"categoryCreatingView.doneButton" = "Готово";
+"scheduleView.title" = "Расписание";
+"scheduleView.doneButton" = "Готово";
+"Monday" = "Понедельник";
+"Tuesday" = "Вторник";
+"Wednesday" = "Среда";
+"Thursday" = "Четверг";
+"Friday" = "Пятница";
+"Saturday" = "Суббота";
+"Sunday" = "Воскресенье";
+"Mon" = "Пн";
+"Tue" = "Вт";
+"Wed" = "Ср";
+"Thu" = "Чт";
+"Fri" = "Пт";
+"Sat" = "Сб";
+"Sun" = "Вс";

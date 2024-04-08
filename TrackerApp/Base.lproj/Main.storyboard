@@ -111,6 +111,8 @@
                         <outlet property="addNewTrackerButton" destination="x4c-LE-rzA" id="Jlf-Hl-sar"/>
                         <outlet property="datePicker" destination="oHc-Ca-NCe" id="Bx2-eg-Rsh"/>
                         <outlet property="emptyStackView" destination="4uH-CO-9sI" id="fnD-xW-8WV"/>
+                        <outlet property="emptyTitle" destination="TSE-6S-4DU" id="a5S-rh-Lmc"/>
+                        <outlet property="noSearchResultTitle" destination="0oC-7E-UwT" id="OzA-6c-hSM"/>
                         <outlet property="noSearchResultsStackView" destination="qCU-ch-PXJ" id="B7A-qw-ex1"/>
                         <outlet property="trackersLabel" destination="fen-Ul-UJM" id="j7d-dc-ihs"/>
                     </connections>

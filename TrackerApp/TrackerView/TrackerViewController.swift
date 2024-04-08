@@ -26,6 +26,8 @@ final class TrackerViewController: UIViewController {
     @IBOutlet weak var addNewTrackerButton: UIButton!
     @IBOutlet weak var datePicker: UIDatePicker!
     @IBOutlet weak var emptyStackView: UIStackView!
+    @IBOutlet weak var emptyTitle: UILabel!
+    @IBOutlet weak var noSearchResultTitle: UILabel!
     @IBOutlet weak var noSearchResultsStackView: UIStackView!
     private let collectionView: UICollectionView = {
         let collectionView = UICollectionView(
@@ -43,7 +45,7 @@ final class TrackerViewController: UIViewController {
     private let searchBar: UISearchTextField = {
         let search = UISearchTextField()
         search.translatesAutoresizingMaskIntoConstraints = false
-        search.placeholder = "Поиск"
+        search.placeholder = NSLocalizedString("trackerViewController.serchPlaceholder", comment: "Search placeholder")
         search.font = UIFont.systemFont(ofSize: 17)
         search.addTarget(self, action: #selector(searchTextChanged), for: .allEvents)
         return search
@@ -142,6 +144,9 @@ final class TrackerViewController: UIViewController {
          dateLabel].forEach {
             view.addSubview($0)
         }
+        trackersLabel.text = NSLocalizedString("trackerViewController.title", comment: "title on trackers page")
+        emptyTitle.text = NSLocalizedString("trackerViewController.emptyTitle", comment: "title that shows when nothing to show")
+        noSearchResultTitle.text = NSLocalizedString("trackerViewController.noSearchResultTitle", comment: "title that show when no search results")
         updateDateLabelTitle(with: currentDate)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
     }

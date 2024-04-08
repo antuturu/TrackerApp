@@ -22,42 +22,42 @@ enum WeekDayModel: Int, CaseIterable {
     case sunday = 1
 
     var value: String {
-        switch self {
-        case .monday:
-            return "Понедельник"
-        case .tuesday:
-            return "Вторник"
-        case .wednesday:
-            return "Среда"
-        case .thursday:
-            return "Четверг"
-        case .friday:
-            return "Пятница"
-        case .saturday:
-            return "Суббота"
-        case .sunday:
-            return "Воскресение"
+            switch self {
+            case .monday:
+                return NSLocalizedString("Monday", comment: "")
+            case .tuesday:
+                return NSLocalizedString("Tuesday", comment: "")
+            case .wednesday:
+                return NSLocalizedString("Wednesday", comment: "")
+            case .thursday:
+                return NSLocalizedString("Thursday", comment: "")
+            case .friday:
+                return NSLocalizedString("Friday", comment: "")
+            case .saturday:
+                return NSLocalizedString("Saturday", comment: "")
+            case .sunday:
+                return NSLocalizedString("Sunday", comment: "")
+            }
         }
-    }
 
     var shortValue: String {
-        switch self {
-        case .monday:
-            return "Пн"
-        case .tuesday:
-            return "Вт"
-        case .wednesday:
-            return "Ср"
-        case .thursday:
-            return "Чт"
-        case .friday:
-            return "Пт"
-        case .saturday:
-            return "Сб"
-        case .sunday:
-            return "Вс"
+            switch self {
+            case .monday:
+                return NSLocalizedString("Mon", comment: "")
+            case .tuesday:
+                return NSLocalizedString("Tue", comment: "")
+            case .wednesday:
+                return NSLocalizedString("Wed", comment: "")
+            case .thursday:
+                return NSLocalizedString("Thu", comment: "")
+            case .friday:
+                return NSLocalizedString("Fri", comment: "")
+            case .saturday:
+                return NSLocalizedString("Sat", comment: "")
+            case .sunday:
+                return NSLocalizedString("Sun", comment: "")
+            }
         }
-    }
     
     static func calculateScheduleValue(for schedule: [WeekDayModel]) -> Int16 {
         var scheduleValue: Int16 = 0

@@ -1,0 +1,49 @@
+/* 
+  Localizable.strings
+  TrackerApp
+
+  Created by Александр Акимов on 07.04.2024.
+  
+*/
+"onboarding.titleFirst" = "Track only what you want";
+"onboarding.titleSecond" = "Even if it's not liters of water and yoga";
+"onboarding.button" = "These are the technologies!";
+"trackerViewController.serchPlaceholder" = "Search";
+"trackerViewController.title" = "Trackers";
+"trackerViewController.emptyTitle" = "What are we going to track?";
+"trackerViewController.noSearchResultTitle" = "Nothing was found";
+"tabBar.trackers" = "Trackers";
+"tabBar.statistic" = "Statistic";
+"trackerCreatingView.title" = "Creating a tracker";
+"trackerCreatingView.regularButton" = "Habit";
+"trackerCreatingView.irregularButton" = "An irregular event";
+"categoryTable" = "Category";
+"scheduleTable" = "Schedule";
+"trackerCreating.namePlaceHolder" = "Enter the name of the tracker";
+"trackerCreating.cancelButton" = "Cancel";
+"trackerCreating.createButton" = "Create";
+"trackerCreatingRegular.title" = "A new habit";
+"trackerCreatingIrregular.title" = "A new irregular event";
+"collectionView.cellTitleColor" = "Color";
+"categoryView.title" = "Categories";
+"categoryView.addButton" = "Add a category";
+"categoryView.textNotFound" = "Habits and events can \nbe combined in meaning";
+"categoryCreatingView.title" = "New category";
+"categoryCreatingView.placeholder" = "Enter the name of the category";
+"categoryCreatingView.doneButton" = "Done";
+"scheduleView.title" = "Schedule";
+"scheduleView.doneButton" = "Done";
+"Monday" = "Monday";
+"Tuesday" = "Tuesday";
+"Wednesday" = "Wednesday";
+"Thursday" = "Thursday";
+"Friday" = "Friday";
+"Saturday" = "Saturday";
+"Sunday" = "Sunday";
+"Mon" = "Mon";
+"Tue" = "Tue";
+"Wed" = "Wed";
+"Thu" = "Thu";
+"Fri" = "Fri";
+"Sat" = "Sat";
+"Sun" = "Sun";

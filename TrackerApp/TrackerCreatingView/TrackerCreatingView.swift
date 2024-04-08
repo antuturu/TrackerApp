@@ -24,7 +24,7 @@ final class TrackerCreatingViewController: UIViewController, TrackerCreatingView
         button.backgroundColor = UIColor(named: "Black [day]")
         button.layer.cornerRadius = 16
         button.layer.masksToBounds = true
-        button.setTitle("Привычка", for: .normal)
+        button.setTitle(NSLocalizedString("trackerCreatingView.regularButton", comment: "regular button text"), for: .normal)
         button.setTitleColor(UIColor(named: "White"), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.addTarget(self, action: #selector(regularButtonClicked), for: .touchUpInside)
@@ -34,7 +34,7 @@ final class TrackerCreatingViewController: UIViewController, TrackerCreatingView
     private let titleLabel: UILabel = {
         let text = UILabel()
         text.translatesAutoresizingMaskIntoConstraints = false
-        text.text = "Создание трекера"
+        text.text = NSLocalizedString("trackerCreatingView.title" , comment: "title of the view")
         text.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         text.textColor = UIColor(named: "Black [day]")
         return text
@@ -46,7 +46,7 @@ final class TrackerCreatingViewController: UIViewController, TrackerCreatingView
         button.backgroundColor = UIColor(named: "Black [day]")
         button.layer.cornerRadius = 16
         button.layer.masksToBounds = true
-        button.setTitle("Нерегулярное событие", for: .normal)
+        button.setTitle(NSLocalizedString("trackerCreatingView.irregularButton", comment: "irregular button text"), for: .normal)
         button.setTitleColor(UIColor(named: "White"), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.addTarget(self, action: #selector(irregularButtonClicked), for: .touchUpInside)

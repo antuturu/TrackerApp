@@ -34,7 +34,7 @@ final class OnBoardingPageViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = UIColor(named: "Black [day]")
         button.layer.cornerRadius = 16
-        button.setTitle("Вот это технологии!", for: .normal)
+        button.setTitle(NSLocalizedString("onboarding.button", comment: "text for the button on onboarding page"), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.addTarget(self, action: #selector(pushButtonNext), for: .touchUpInside)
         return button
