@@ -12,12 +12,13 @@ protocol TrackerViewControllerDelegate: AnyObject {
 }
 
 final class TrackerViewController: UIViewController {
-    
+    private let analytics = AnalyticsService()
     var categories: [TrackerCategory] = []
     private var visibleCategories: [TrackerCategory] = []
     private var completedTrackers: [TrackerRecord] = []
     private var currentDate: Date = .init()
     private var selectedFilterIndex: Int?
+    private var delegate: StatisticsViewControllerDelegate?
     
     private let trackerStore: TrackerStoreProtocol = TrackerStore()
     private let trackerCategoryStore: TrackerCategoryStoreProtocol = TrackerCategoryStore()
@@ -81,9 +82,12 @@ final class TrackerViewController: UIViewController {
     }()
     
     override func viewDidLoad() {
+        let params : [AnyHashable : Any] = ["event": "open", "screen": "Main"]
+        analytics.report(event: "open", params: params)
         super.viewDidLoad()
         collectionView.dataSource = self
         collectionView.delegate = self
+        delegate = StatisticsViewController()
         configureView()
         configureConstraints()
         emptyCollectionView()
@@ -100,6 +104,13 @@ final class TrackerViewController: UIViewController {
         view.addGestureRecognizer(tapGesture)
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        let params : [AnyHashable : Any] = ["event": "close", "screen": "Main"]
+        analytics.report(event: "open", params: params)
+    }
+    
+    
     @IBAction func dateChanged(_ sender: Any) {
         currentDate = datePicker.date
         updateDateLabelTitle(with: currentDate)
@@ -109,6 +120,8 @@ final class TrackerViewController: UIViewController {
     }
     
     @objc private func filterButtonTapped() {
+        let params : [AnyHashable : Any] = ["event": "click", "screen": "Main", "item": "filter"]
+        analytics.report(event: "click", params: params)
         let filterViewController = FiltersViewController()
         filterViewController.delegate = self
         filterViewController.selectedFilterIndex = self.selectedFilterIndex
@@ -148,6 +161,8 @@ final class TrackerViewController: UIViewController {
     }
     
     @IBAction private func addNewTrackerTapped(_ sender: Any) {
+        let params : [AnyHashable : Any] = ["event": "click", "screen": "Main", "item": "add_track"]
+        analytics.report(event: "click", params: params)
         let trackerCreatingViewController = TrackerCreatingViewController()
         trackerCreatingViewController.delegate = self
         let navigationController = UINavigationController(rootViewController: trackerCreatingViewController)
@@ -380,6 +395,7 @@ final class TrackerViewController: UIViewController {
         }
         selectedFilter(selectedFilterIndex ?? 1)
         UserDefaults.standard.set(completedTrackers.count, forKey: "Completed")
+        delegate?.hideImage()
     }
     
 }
@@ -525,6 +541,7 @@ extension TrackerViewController: TrackerCollectionViewCellDelegate {
         
         completedTrackers.append(TrackerRecord(id: id, date: formattedDay))
         try? trackerRecordStore.createRecord(id: id, date: formattedDay)
+        reloadData()
         collectionView.reloadData()
     }
     
@@ -537,6 +554,7 @@ extension TrackerViewController: TrackerCollectionViewCellDelegate {
             $0.id == id && Calendar.current.isDate($0.date, equalTo: formattedDay, toGranularity: .day)
         }
         try? trackerRecordStore.deleteRecord(id: id, date: formattedDay)
+        reloadData()
         collectionView.reloadData()
     }
 }

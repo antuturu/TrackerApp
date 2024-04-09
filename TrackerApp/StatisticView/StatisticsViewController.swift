@@ -7,7 +7,11 @@
 
 import UIKit
 
-final class StatisticsViewController: UIViewController {
+protocol StatisticsViewControllerDelegate {
+    func hideImage()
+}
+
+final class StatisticsViewController: UIViewController, StatisticsViewControllerDelegate {
     
     private var titleLabel: UILabel = {
         let text = UILabel()
@@ -18,7 +22,7 @@ final class StatisticsViewController: UIViewController {
         return text
     }()
     
-    private lazy var completedDays: Int = {
+    private var completedDays: Int = {
         let num = UserDefaults.standard.integer(forKey: "Completed")
         return num
     }()
@@ -169,19 +173,32 @@ final class StatisticsViewController: UIViewController {
         hideImage()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        hideImage()
+    }
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        hideImage()
+    }
+    
     override func viewDidLayoutSubviews() {
        addGradient()
     }
     
     
     func hideImage(){
-        if completedDays == 0 {
+        print("рассчет")
+        print(UserDefaults.standard.integer(forKey: "Completed"))
+        if UserDefaults.standard.integer(forKey: "Completed") == 0 {
             mainView1.isHidden = true
             mainView2.isHidden = true
             mainView3.isHidden = true
             mainView4.isHidden = true
             imageView.isHidden = false
             textNotFoundLabel.isHidden = false
+            numberText3.text = String(UserDefaults.standard.integer(forKey: "Completed"))
         } else {
             mainView1.isHidden = false
             mainView2.isHidden = false
@@ -189,7 +206,7 @@ final class StatisticsViewController: UIViewController {
             mainView4.isHidden = false
             imageView.isHidden = true
             textNotFoundLabel.isHidden = true
-            numberText3.text = String(completedDays)
+            numberText3.text = String(UserDefaults.standard.integer(forKey: "Completed"))
         }
     }
     

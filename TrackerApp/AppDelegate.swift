@@ -7,6 +7,7 @@
 
 import UIKit
 import CoreData
+import AppMetricaCore
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -26,6 +27,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         self.window?.rootViewController = initialViewController
         self.window?.makeKeyAndVisible()
+        let configuration = AppMetricaConfiguration(apiKey: "62acfd00-a445-4d86-b4f5-0c3aaed8c790")
+        AppMetrica.activate(with: configuration!)
         return true
     }
     

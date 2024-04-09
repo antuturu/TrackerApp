@@ -16,7 +16,7 @@ protocol TrackerCollectionViewCellDelegate: AnyObject {
 }
 
 final class TrackerCollectionViewCell: UICollectionViewCell {
-    
+    private var analytics = AnalyticsService()
     var isCompleted: Bool?
     var trackerID: UUID?
     var indexPath: IndexPath?
@@ -130,6 +130,8 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     }
     
     @objc private func countButtonTapped() {
+        let params : [AnyHashable : Any] = ["event": "click", "screen": "Main", "item": "track"]
+        analytics.report(event: "click", params: params)
         guard let isCompleted = isCompleted,
               let trackerID = trackerID
         else {
@@ -226,12 +228,16 @@ extension TrackerCollectionViewCell: UIContextMenuInteractionDelegate {
                 }
 
                 let editAction = UIAction(title: NSLocalizedString("editAction.title", comment: "")) { [weak self] _ in
+                    let params : [AnyHashable : Any] = ["event": "click", "screen": "Main", "item": "edit"]
+                    self?.analytics.report(event: "click", params: params)
                     let tracker = Tracker(idTracker: tracker.idTracker, name: tracker.name, color: tracker.color, colorString: tracker.colorString, emoji: tracker.emoji, schedule: tracker.schedule, pinned: tracker.pinned, selectedCategoryIndex: tracker.selectedCategoryIndex, emojiIndex: tracker.emojiIndex, colorIndex: tracker.colorIndex)
                     print(tracker)
                     self?.delegate?.editTracker(tracker: tracker, completedDays: completedDays)
                 }
 
                 let deleteAction = UIAction(title: NSLocalizedString("deleteAction.title", comment: ""), attributes: .destructive) { [weak self] _ in
+                    let params : [AnyHashable : Any] = ["event": "click", "screen": "Main", "item": "delete"]
+                    self?.analytics.report(event: "click", params: params)
                     let tracker = Tracker(idTracker: tracker.idTracker, name: "", color: .clear, colorString: "", emoji: "", schedule: [], pinned: false, selectedCategoryIndex: tracker.selectedCategoryIndex, emojiIndex: tracker.emojiIndex, colorIndex: tracker.colorIndex)
                     self?.delegate?.deleteTracker(tracker: tracker)
                 }
