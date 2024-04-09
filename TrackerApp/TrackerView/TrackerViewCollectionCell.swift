@@ -10,6 +10,9 @@ import UIKit
 protocol TrackerCollectionViewCellDelegate: AnyObject {
     func completeTracker(id: UUID)
     func uncompleteTracker(id: UUID)
+    func deleteTracker(tracker: Tracker)
+    func pinTracker(tracker: Tracker)
+    func editTracker(tracker: Tracker, completedDays: Int)
 }
 
 final class TrackerCollectionViewCell: UICollectionViewCell {
@@ -17,6 +20,9 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     var isCompleted: Bool?
     var trackerID: UUID?
     var indexPath: IndexPath?
+    var tracker: Tracker?
+    var completedDays: Int?
+    private var isPinned: Bool = false
     
     weak var delegate: TrackerCollectionViewCellDelegate?
     
@@ -68,6 +74,20 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         return button
     }()
     
+    private let pinImage: UIImageView = {
+            let image = UIImageView()
+            image.translatesAutoresizingMaskIntoConstraints = false
+            image.image = UIImage(systemName: "pin.fill")
+            image.image = image.image?.withAlignmentRectInsets(UIEdgeInsets(
+                top: -6,
+                left: -6,
+                bottom: -6,
+                right: -6)
+            )
+            image.tintColor = .white
+            return image
+        }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -85,6 +105,9 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         mainView.backgroundColor = tracker.color
         countButton.backgroundColor = tracker.color
         updateCounterLabelText(completedDays: completedDays)
+        self.completedDays = completedDays
+        self.tracker = tracker
+        self.isPinned = tracker.pinned
         self.trackerID = tracker.idTracker
         self.isCompleted = isCompletedToday
         self.indexPath = indexPath
@@ -102,6 +125,8 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
             imageButton.centerXAnchor.constraint(equalTo: countButton.centerXAnchor),
             imageButton.centerYAnchor.constraint(equalTo: countButton.centerYAnchor)
         ])
+        
+        showPin()
     }
     
     @objc private func countButtonTapped() {
@@ -124,6 +149,9 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         mainView.backgroundColor = .green
         mainView.addSubview(emojiLabel)
         mainView.addSubview(titleLabel)
+        mainView.addSubview(pinImage)
+        let interaction = UIContextMenuInteraction(delegate: self)
+        mainView.addInteraction(interaction)
     }
     
     private func configureConstraints() {
@@ -149,9 +177,22 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
             countButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
             countButton.topAnchor.constraint(equalTo: mainView.bottomAnchor, constant: 8),
             countButton.widthAnchor.constraint(equalToConstant: 34),
-            countButton.heightAnchor.constraint(equalToConstant: 34)
+            countButton.heightAnchor.constraint(equalToConstant: 34),
+            
+            pinImage.widthAnchor.constraint(equalToConstant: 24),
+            pinImage.heightAnchor.constraint(equalToConstant: 24),
+            pinImage.topAnchor.constraint(equalTo: mainView.topAnchor, constant: 12),
+            pinImage.trailingAnchor.constraint(equalTo: mainView.trailingAnchor, constant: -4)
         ])
     }
+    
+    private func showPin() {
+            if self.isPinned {
+                pinImage.isHidden = false
+            } else {
+                pinImage.isHidden = true
+            }
+        }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -163,5 +204,39 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
             completedDays
         )
         dayLabel.text = formattedString
+    }
+}
+
+extension TrackerCollectionViewCell: UIContextMenuInteractionDelegate {
+    func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
+        guard let tracker = tracker,
+              let completedDays = completedDays
+        else {
+            return nil
+        }
+
+        return UIContextMenuConfiguration(
+            identifier: nil,
+            previewProvider: nil,
+            actionProvider: { _ in
+
+                let pinAction = UIAction(title: self.isPinned ? NSLocalizedString("pinAction.titleRemove", comment: "") : NSLocalizedString("pinAction.title", comment: "")) { [weak self] _ in
+                    let tracker = Tracker(idTracker: tracker.idTracker, name: "", color: .clear, colorString: "", emoji: "", schedule: [], pinned: tracker.pinned, selectedCategoryIndex: Int(), emojiIndex: Int(), colorIndex: Int())
+                    self?.delegate?.pinTracker(tracker: tracker)
+                }
+
+                let editAction = UIAction(title: NSLocalizedString("editAction.title", comment: "")) { [weak self] _ in
+                    let tracker = Tracker(idTracker: tracker.idTracker, name: tracker.name, color: tracker.color, colorString: tracker.colorString, emoji: tracker.emoji, schedule: tracker.schedule, pinned: tracker.pinned, selectedCategoryIndex: tracker.selectedCategoryIndex, emojiIndex: tracker.emojiIndex, colorIndex: tracker.colorIndex)
+                    print(tracker)
+                    self?.delegate?.editTracker(tracker: tracker, completedDays: completedDays)
+                }
+
+                let deleteAction = UIAction(title: NSLocalizedString("deleteAction.title", comment: ""), attributes: .destructive) { [weak self] _ in
+                    let tracker = Tracker(idTracker: tracker.idTracker, name: "", color: .clear, colorString: "", emoji: "", schedule: [], pinned: false, selectedCategoryIndex: tracker.selectedCategoryIndex, emojiIndex: tracker.emojiIndex, colorIndex: tracker.colorIndex)
+                    self?.delegate?.deleteTracker(tracker: tracker)
+                }
+                return UIMenu(title: "", children: [pinAction, editAction, deleteAction])
+            }
+        )
     }
 }

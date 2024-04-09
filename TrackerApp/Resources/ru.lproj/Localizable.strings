@@ -10,6 +10,7 @@
 "onboarding.button" = "Вот это технологии!";
 "trackerViewController.serchPlaceholder" = "Поиск";
 "trackerViewController.title" = "Трекеры";
+"trackerViewController.filterButton" = "Фильтры";
 "trackerViewController.emptyTitle" = "Что будем отслеживать?";
 "trackerViewController.noSearchResultTitle" = "Ничего не найдено";
 "tabBar.trackers" = "Трекеры";
@@ -31,6 +32,13 @@
 "categoryCreatingView.title" = "Новая категория";
 "categoryCreatingView.placeholder" = "Введите название категории";
 "categoryCreatingView.doneButton" = "Готово";
+"deleteTrackerAlertAction.title" = "Уверены что хотите удалить трекер?";
+"deleteTrackerAlertAction.apply" = "Удалить";
+"deleteTrackerAlertAction.cancel" = "Отменить";
+"pinAction.title" = "Закрепить";
+"pinAction.titleRemove" = "Открепить";
+"editAction.title" = "Редактировать";
+"deleteAction.title" = "Удалить";
 "scheduleView.title" = "Расписание";
 "scheduleView.doneButton" = "Готово";
 "Monday" = "Понедельник";
@@ -47,3 +55,8 @@
 "Fri" = "Пт";
 "Sat" = "Сб";
 "Sun" = "Вс";
+"pinnedCategoryTitle" = "Закрепленные";
+"statisticView.title" = "Статистика";
+"statisticView.textNotFound" = "Анализировать пока нечего";
+"editingTracker.title" = "Редактирование привычки";
+"editingTracker.saveButton" = "Сохранить";

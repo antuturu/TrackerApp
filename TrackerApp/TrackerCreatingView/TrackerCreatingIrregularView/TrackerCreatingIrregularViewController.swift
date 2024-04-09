@@ -166,13 +166,16 @@ final class TrackerCreatingIrregularViewController: UIViewController {
         let scheduleArray = [newSchedule]
         let weekdayArray = scheduleArray.map { $0.day }
         dismiss(animated: true)
-        guard let color = selectedColor, let emoji = selectedEmoji else { return }
+        guard let color = selectedColor, let emoji = selectedEmoji, let categoryIndex = selectedCategotyIndex, let emojiIndex = selectedEmoji, let colorIndex = selectedColor else { return }
         let tracker = Tracker(idTracker: UUID(),
                               name: textField.text ?? "",
                               color: UIColor(named: colors[color]) ?? .red,
                               colorString: colors[color],
                               emoji: emojiz[emoji],
-                              schedule: weekdayArray)
+                              schedule: weekdayArray, 
+                              pinned: false,
+                              selectedCategoryIndex: categoryIndex,
+        emojiIndex: emoji, colorIndex: color)
         delegate?.createTracker(tracker: tracker, categoryTitle: selectedCategory)
     }
     

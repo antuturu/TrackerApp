@@ -10,6 +10,7 @@
 "onboarding.button" = "These are the technologies!";
 "trackerViewController.serchPlaceholder" = "Search";
 "trackerViewController.title" = "Trackers";
+"trackerViewController.filterButton" = "Filters";
 "trackerViewController.emptyTitle" = "What are we going to track?";
 "trackerViewController.noSearchResultTitle" = "Nothing was found";
 "tabBar.trackers" = "Trackers";
@@ -31,6 +32,13 @@
 "categoryCreatingView.title" = "New category";
 "categoryCreatingView.placeholder" = "Enter the name of the category";
 "categoryCreatingView.doneButton" = "Done";
+"deleteTrackerAlertAction.title" = "Are you sure you want to delete the tracker?";
+"deleteTrackerAlertAction.apply" = "Delete";
+"deleteTrackerAlertAction.cancel" = "Cancel";
+"pinAction.title" = "Pin";
+"pinAction.titleRemove" = "Unpin";
+"editAction.title" = "Edit";
+"deleteAction.title" = "Delete";
 "scheduleView.title" = "Schedule";
 "scheduleView.doneButton" = "Done";
 "Monday" = "Monday";
@@ -47,3 +55,8 @@
 "Fri" = "Fri";
 "Sat" = "Sat";
 "Sun" = "Sun";
+"pinnedCategoryTitle" = "Fixed";
+"statisticView.title" = "Statistics";
+"statisticView.textNotFound" = "There is nothing to analyze yet";
+"editingTracker.title" = "Editing a habit";
+"editingTracker.saveButton" = "Save";

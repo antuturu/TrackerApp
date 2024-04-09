@@ -1,17 +1,21 @@
 //
-//  TrackerCreatingRegularViewController.swift
+//  EditaViewController.swift
 //  TrackerApp
 //
-//  Created by Александр Акимов on 07.03.2024.
+//  Created by Александр Акимов on 09.04.2024.
 //
 
 import UIKit
 
-// MARK: - UIViewController
+protocol EditViewControllerDelegate {
+    func editedTracker(tracker: Tracker, categoryTitle: String)
+}
 
-final class TrackerCreatingRegularViewController: UIViewController {
+final class EditViewController: UIViewController {
     
-    weak var delegate: TrackerCreatingViewControllerProtocol?
+    var tracker: Tracker?
+    var completedDays: Int?
+    var delegate: EditViewControllerDelegate?
     
     private let dataForTableView = [NSLocalizedString("categoryTable", comment: ""), NSLocalizedString("scheduleTable", comment: "")]
     private var selectedSchedule: [WeekDayModel] = []
@@ -63,10 +67,20 @@ final class TrackerCreatingRegularViewController: UIViewController {
         return textField
     }()
     
+    private let completedDaysLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 32, weight: .bold)
+        label.textColor = UIColor(named: "Black [day]")
+        label.textAlignment = .center
+        label.text = "0"
+        return label
+    }()
+    
     private let titleLabel: UILabel = {
         let text = UILabel()
         text.translatesAutoresizingMaskIntoConstraints = false
-        text.text = NSLocalizedString("trackerCreatingRegular.title", comment: "title on regular page")
+        text.text = NSLocalizedString("editingTracker.title", comment: "title on edit page")
         text.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         text.textColor = UIColor(named: "Black [day]")
         return text
@@ -114,7 +128,7 @@ final class TrackerCreatingRegularViewController: UIViewController {
         button.backgroundColor = UIColor(named: "Black [day]")
         button.layer.cornerRadius = 16
         button.layer.masksToBounds = true
-        let localizedText = NSLocalizedString("trackerCreating.createButton", comment: "")
+        let localizedText = NSLocalizedString("editingTracker.saveButton", comment: "")
         button.setTitle(localizedText, for: .normal)
         button.setTitleColor(UIColor(named: "White"), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
@@ -157,25 +171,42 @@ final class TrackerCreatingRegularViewController: UIViewController {
         configureConstraints()
         createButton.isEnabled = false
         createButtonActivation()
+        updateCounterLabelText(completedDays: completedDays ?? 0)
+        guard let tracker = tracker else { return }
+        textField.text = tracker.name
+        self.selectedCategotyIndex = tracker.selectedCategoryIndex
+        isTextEntered = true
+        self.selectedColor = tracker.colorIndex
+        isColorSelected = true
+        self.selectedEmoji = tracker.emojiIndex
+        isEmojiSelected = true
+        self.selectedSchedule = tracker.schedule
+        isScheduleSelected = true
+        updateScheduleInfo(selectedSchedule)
+        let indexPathColor = IndexPath(row: tracker.colorIndex, section: 1)
+        let indexPathEmoji = IndexPath(row: tracker.emojiIndex, section: 0)
+        emojiCollectionView.selectItem(at: indexPathColor, animated: false, scrollPosition: [])
+        emojiCollectionView.selectItem(at: indexPathEmoji, animated: false, scrollPosition: [])
     }
     
     @objc private func pushCreateButton() {
         guard let color = selectedColor,
               let emoji = selectedEmoji,
               let trackerName = textField.text,
+              let idTracker = tracker?.idTracker,
         let categoryIndex = selectedCategotyIndex else { return }
         let newTracker = Tracker(
-            idTracker: UUID(),
+            idTracker: idTracker,
             name: trackerName,
             color: UIColor(named: colors[color]) ?? .blue,
             colorString: colors[color],
             emoji: emojiz[emoji],
-            schedule: selectedSchedule, 
+            schedule: selectedSchedule,
             pinned: false,
         selectedCategoryIndex: categoryIndex,
         emojiIndex: emoji,
         colorIndex: color)
-        delegate?.createTracker(tracker: newTracker, categoryTitle: selectedCategory)
+        delegate?.editedTracker(tracker: newTracker, categoryTitle: selectedCategory)
         dismiss(animated: true)
     }
     
@@ -187,11 +218,20 @@ final class TrackerCreatingRegularViewController: UIViewController {
         view.endEditing(true)
     }
     
+    private func updateCounterLabelText(completedDays: Int) {
+        let formattedString = String.localizedStringWithFormat(
+            NSLocalizedString("StringKey", comment: ""),
+            completedDays
+        )
+        completedDaysLabel.text = formattedString
+    }
+    
     private func configureView() {
         navigationItem.titleView = titleLabel
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
-        [textField,
+        [completedDaysLabel,
+         textField,
          tableView,
          stackView
         ].forEach {
@@ -218,15 +258,20 @@ final class TrackerCreatingRegularViewController: UIViewController {
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
             contentView.widthAnchor.constraint(equalTo: view.widthAnchor),
-            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            contentView.topAnchor.constraint(equalTo: contentView.topAnchor),
             contentView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            contentView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            
+            completedDaysLabel.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 24),
+            completedDaysLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            completedDaysLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            completedDaysLabel.heightAnchor.constraint(equalToConstant: 50),
             
             textField.heightAnchor.constraint(equalToConstant: 75),
             textField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             textField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            textField.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 24),
+            textField.topAnchor.constraint(equalTo: completedDaysLabel.bottomAnchor, constant: 40),
             
             tableView.heightAnchor.constraint(equalToConstant: 150),
             tableView.leadingAnchor.constraint(equalTo: textField.leadingAnchor),
@@ -241,9 +286,11 @@ final class TrackerCreatingRegularViewController: UIViewController {
             stackView.topAnchor.constraint(equalTo: emojiCollectionView.bottomAnchor, constant: 16),
             stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            stackView.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: 0)
+            stackView.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: 0),
+            
+            
         ])
-        scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + 105)
+        scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + 200)
     }
     
     private func updateCategory(_ category: String) {
@@ -253,9 +300,9 @@ final class TrackerCreatingRegularViewController: UIViewController {
     }
     
     private func setSubTitle(_ subTitle: String, forCellAt indexPath: IndexPath) {
-        guard let cell = tableView.cellForRow(at: indexPath) as? ButtonCell else {
-            return
+        guard let cell = tableView.cellForRow(at: indexPath) as? ButtonCell else {            return
         }
+        guard let cell = tableView.cellForRow(at: indexPath) as? ButtonCell else { return }
         cell.set(subText: subTitle)
     }
     
@@ -270,7 +317,7 @@ final class TrackerCreatingRegularViewController: UIViewController {
     }
 }
 
-extension TrackerCreatingRegularViewController: ScheduleViewControllerDelegate {
+extension EditViewController: ScheduleViewControllerDelegate {
     func updateScheduleInfo(_ selectedDays: [WeekDayModel]) {
         self.selectedSchedule = selectedDays
         let subText: String
@@ -288,7 +335,7 @@ extension TrackerCreatingRegularViewController: ScheduleViewControllerDelegate {
 
 // MARK: - UITableViewDelegate
 
-extension TrackerCreatingRegularViewController: UITableViewDelegate {
+extension EditViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         if indexPath.row == 0 {
@@ -308,7 +355,7 @@ extension TrackerCreatingRegularViewController: UITableViewDelegate {
 
 // MARK: - UITableViewDataSource
 
-extension TrackerCreatingRegularViewController: UITableViewDataSource {
+extension EditViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return dataForTableView.count
     }
@@ -336,7 +383,7 @@ extension TrackerCreatingRegularViewController: UITableViewDataSource {
 
 // MARK: - UITextFieldDelegate
 
-extension TrackerCreatingRegularViewController: UITextFieldDelegate {
+extension EditViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField,
                    shouldChangeCharactersIn range: NSRange,
                    replacementString string: String) -> Bool {
@@ -352,7 +399,7 @@ extension TrackerCreatingRegularViewController: UITextFieldDelegate {
 
 // MARK: - CategoryViewControllerDelegate
 
-extension TrackerCreatingRegularViewController: CategoryAddViewControllerDelegate {
+extension EditViewController: CategoryAddViewControllerDelegate {
     func didSelectCategory(_ category: String, index: Int?) {
         updateCategory(category)
         selectedCategotyIndex = index
@@ -361,7 +408,7 @@ extension TrackerCreatingRegularViewController: CategoryAddViewControllerDelegat
 
 // MARK: - UICollectionViewDelegate
 
-extension TrackerCreatingRegularViewController: UICollectionViewDelegate {
+extension EditViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         switch indexPath.section {
         case 0:
@@ -398,7 +445,7 @@ extension TrackerCreatingRegularViewController: UICollectionViewDelegate {
 
 // MARK: - UICollectionViewDataSource
 
-extension TrackerCreatingRegularViewController: UICollectionViewDataSource {
+extension EditViewController: UICollectionViewDataSource {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 2
@@ -448,7 +495,7 @@ extension TrackerCreatingRegularViewController: UICollectionViewDataSource {
 
 // MARK: - UICollectionViewDelegateFlowLayout
 
-extension TrackerCreatingRegularViewController: UICollectionViewDelegateFlowLayout {
+extension EditViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
@@ -457,11 +504,11 @@ extension TrackerCreatingRegularViewController: UICollectionViewDelegateFlowLayo
         if collectionView.bounds.width < 430 {
             itemWidth = 52
             NSLayoutConstraint.activate([
-            collectionView.heightAnchor.constraint(equalToConstant: 450)
+                collectionView.heightAnchor.constraint(equalToConstant: 450)
             ])
         } else {
             NSLayoutConstraint.activate([
-            collectionView.heightAnchor.constraint(equalToConstant: 500)
+                collectionView.heightAnchor.constraint(equalToConstant: 500)
             ])
             itemWidth = 60
         }
@@ -498,3 +545,6 @@ extension TrackerCreatingRegularViewController: UICollectionViewDelegateFlowLayo
                                                   verticalFittingPriority: .fittingSizeLevel)
     }
 }
+
+
+
