@@ -23,7 +23,7 @@ final class OnBoardingPageViewController: UIViewController {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
-        label.textColor = UIColor(named: "Black [day]")
+        label.textColor = UIColor(named: "Black 1")
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 32, weight: .bold)
         return label
@@ -32,7 +32,7 @@ final class OnBoardingPageViewController: UIViewController {
     private lazy var buttonNext: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = UIColor(named: "Black [day]")
+        button.backgroundColor = UIColor(named: "Black 1")
         button.layer.cornerRadius = 16
         button.setTitle(NSLocalizedString("onboarding.button", comment: "text for the button on onboarding page"), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
