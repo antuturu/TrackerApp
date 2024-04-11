@@ -40,7 +40,7 @@ final class StatisticsViewController: UIViewController, StatisticsViewController
     private let descrText1: UILabel = {
         let text = UILabel()
         text.translatesAutoresizingMaskIntoConstraints = false
-        text.text = "Лучший период"
+        text.text = NSLocalizedString("statisticView.first", comment: "")
         text.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         text.textColor = UIColor(named: "Black [day]")
         text.textAlignment = .left
@@ -60,7 +60,7 @@ final class StatisticsViewController: UIViewController, StatisticsViewController
     private let descrText2: UILabel = {
         let text = UILabel()
         text.translatesAutoresizingMaskIntoConstraints = false
-        text.text = "Идеальные дни"
+        text.text = NSLocalizedString("statisticView.second", comment: "")
         text.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         text.textColor = UIColor(named: "Black [day]")
         text.textAlignment = .left
@@ -80,7 +80,7 @@ final class StatisticsViewController: UIViewController, StatisticsViewController
     private let descrText3: UILabel = {
         let text = UILabel()
         text.translatesAutoresizingMaskIntoConstraints = false
-        text.text = "Трекеров завершено"
+        text.text = NSLocalizedString("statisticView.third", comment: "")
         text.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         text.textColor = UIColor(named: "Black [day]")
         text.textAlignment = .left
@@ -100,7 +100,7 @@ final class StatisticsViewController: UIViewController, StatisticsViewController
     private let descrText4: UILabel = {
         let text = UILabel()
         text.translatesAutoresizingMaskIntoConstraints = false
-        text.text = "Среднее значение"
+        text.text = NSLocalizedString("statisticView.fourth", comment: "")
         text.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         text.textColor = UIColor(named: "Black [day]")
         text.textAlignment = .left
@@ -142,7 +142,7 @@ final class StatisticsViewController: UIViewController, StatisticsViewController
     private let imageView: UIImageView = {
         let image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
-        image.image = UIImage(named: "statisticImage")
+        image.image = UIImage(named: "statisticImage.png")
         return image
     }()
     
@@ -189,8 +189,6 @@ final class StatisticsViewController: UIViewController, StatisticsViewController
     
     
     func hideImage(){
-        print("рассчет")
-        print(UserDefaults.standard.integer(forKey: "Completed"))
         if UserDefaults.standard.integer(forKey: "Completed") == 0 {
             mainView1.isHidden = true
             mainView2.isHidden = true

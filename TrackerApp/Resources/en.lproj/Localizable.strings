@@ -58,5 +58,9 @@
 "pinnedCategoryTitle" = "Fixed";
 "statisticView.title" = "Statistics";
 "statisticView.textNotFound" = "There is nothing to analyze yet";
+"statisticView.first" = "The best period";
+"statisticView.second" = "Perfect days";
+"statisticView.third" = "Trackers completed";
+"statisticView.fourth" = "The average value";
 "editingTracker.title" = "Editing a habit";
 "editingTracker.saveButton" = "Save";

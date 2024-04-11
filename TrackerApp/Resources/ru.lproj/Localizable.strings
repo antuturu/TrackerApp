@@ -58,5 +58,9 @@
 "pinnedCategoryTitle" = "Закрепленные";
 "statisticView.title" = "Статистика";
 "statisticView.textNotFound" = "Анализировать пока нечего";
+"statisticView.first" = "Лучший период";
+"statisticView.second" = "Идеальные дни";
+"statisticView.third" = "Трекеров завершено";
+"statisticView.fourth" = "Среднее значение";
 "editingTracker.title" = "Редактирование привычки";
 "editingTracker.saveButton" = "Сохранить";
