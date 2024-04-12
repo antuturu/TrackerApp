@@ -1,0 +1,15 @@
+
+/* Class = "UILabel"; text = "Ничего не найдено"; ObjectID = "0oC-7E-UwT"; */
+"0oC-7E-UwT.text" = "Ничего не найдено";
+
+/* Class = "UITabBarItem"; title = "Трекеры"; ObjectID = "LGS-GI-b9m"; */
+"LGS-GI-b9m.title" = "Трекеры";
+
+/* Class = "UILabel"; text = "Что будем отслеживать?"; ObjectID = "TSE-6S-4DU"; */
+"TSE-6S-4DU.text" = "Что будем отслеживать?";
+
+/* Class = "UILabel"; text = "Трекеры"; ObjectID = "fen-Ul-UJM"; */
+"fen-Ul-UJM.text" = "Трекеры";
+
+/* Class = "UITabBarItem"; title = "Статистика"; ObjectID = "wG3-R6-RwW"; */
+"wG3-R6-RwW.title" = "Статистика";

@@ -15,6 +15,7 @@ struct TrackerStoreUpdate {
 
 private enum TrackerStoreError: Error {
     case decodingErrorInvalidID
+    case trackerNotFound
 }
 
 protocol TrackerStoreDelegate: AnyObject {
@@ -25,6 +26,9 @@ protocol TrackerStoreProtocol {
     func setDelegate(_ delegate: TrackerStoreDelegate)
     func fetchTracker(_ trackerCoreData: TrackerCoreData) throws -> Tracker
     func addTracker(_ tracker: Tracker, toCategory category: TrackerCategory) throws
+    func deleteTracker(_ tracker: Tracker) throws
+    func pinTracker(_ tracker: Tracker) throws
+    func editTracker(_ tracker: Tracker, toCategory category: TrackerCategory) throws
 }
 
 final class TrackerStore: NSObject {
@@ -74,6 +78,7 @@ final class TrackerStore: NSObject {
     
     private func saveContext() throws {
         guard context.hasChanges else { return }
+        print(context.hasChanges)
         do {
             try context.save()
         } catch {
@@ -128,6 +133,33 @@ extension TrackerStore: TrackerStoreProtocol {
         self.delegate = delegate
     }
     
+    func pinTracker(_ tracker: Tracker) throws {
+        let fetchRequest: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "idTracker == %@", tracker.idTracker as CVarArg)
+        if let result = try context.fetch(fetchRequest).first {
+            result.pinned = !result.pinned
+            try saveContext()
+        } else {
+            throw TrackerStoreError.trackerNotFound
+        }
+    }
+    
+    func editTracker(_ tracker: Tracker, toCategory category: TrackerCategory) throws {
+        let fetchRequest: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
+        let trackerCategoryCoreData = try trackerCategoryStore.fetchCategoryCoreData(for: category)
+        fetchRequest.predicate = NSPredicate(format: "idTracker == %@", tracker.idTracker as CVarArg)
+        if let result = try context.fetch(fetchRequest).first {
+            result.name = tracker.name
+            result.emoji = tracker.emoji
+            result.color = tracker.colorString
+            result.schedule = WeekDayModel.calculateScheduleValue(for: tracker.schedule)
+            result.trackerCategory = trackerCategoryCoreData
+            try saveContext()
+        } else {
+            throw TrackerStoreError.trackerNotFound
+        }
+    }
+    
     func fetchTracker(_ trackerCoreData: TrackerCoreData) throws -> Tracker {
         guard let id = trackerCoreData.idTracker,
               let name = trackerCoreData.name,
@@ -138,6 +170,9 @@ extension TrackerStore: TrackerStoreProtocol {
         
         let color = UIColor(named: colorString) ?? .red
         let schedule = WeekDayModel.calculateScheduleArray(from: trackerCoreData.schedule)
+        let categoryIndex = Int(trackerCoreData.selectedCategoryIndex)
+        let emojiIndex = Int(trackerCoreData.emojiIndex)
+        let colorIndex = Int(trackerCoreData.colorIndex)
         
         return Tracker(
             idTracker: id,
@@ -145,9 +180,24 @@ extension TrackerStore: TrackerStoreProtocol {
             color: color,
             colorString: colorString,
             emoji: emoji,
-            schedule: schedule
+            schedule: schedule,
+            pinned: trackerCoreData.pinned,
+            selectedCategoryIndex: categoryIndex,
+            emojiIndex: emojiIndex,
+            colorIndex: colorIndex
         )
     }
+    
+    func deleteTracker(_ tracker: Tracker) throws {
+            let fetchRequest: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
+            fetchRequest.predicate = NSPredicate(format: "idTracker == %@", tracker.idTracker as CVarArg)
+            if let result = try context.fetch(fetchRequest).first {
+                context.delete(result)
+                try saveContext()
+            } else {
+                throw TrackerStoreError.trackerNotFound
+            }
+        }
     
     func addTracker(_ tracker: Tracker, toCategory category: TrackerCategory) throws {
         let trackerCategoryCoreData = try trackerCategoryStore.fetchCategoryCoreData(for: category)
@@ -159,7 +209,9 @@ extension TrackerStore: TrackerStoreProtocol {
         trackerCoreData.emoji = tracker.emoji
         trackerCoreData.schedule = WeekDayModel.calculateScheduleValue(for: tracker.schedule)
         trackerCoreData.trackerCategory = trackerCategoryCoreData
-        
+        trackerCoreData.colorIndex = Int16(tracker.colorIndex)
+        trackerCoreData.emojiIndex = Int16(tracker.emojiIndex)
+        trackerCoreData.selectedCategoryIndex = Int16(tracker.selectedCategoryIndex)
         try saveContext()
     }
 }

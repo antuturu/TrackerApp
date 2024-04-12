@@ -23,7 +23,7 @@ final class CreateNewCategoryViewController: UIViewController {
         textField.layer.masksToBounds = true
         textField.font = UIFont.systemFont(ofSize: 17)
         textField.addLeftPadding(16)
-        textField.placeholder = "Введите название категории"
+        textField.placeholder = NSLocalizedString("categoryCreatingView.placeholder", comment: "")
         textField.clearButtonMode = .whileEditing
         textField.returnKeyType = .done
         textField.enablesReturnKeyAutomatically = true
@@ -34,7 +34,7 @@ final class CreateNewCategoryViewController: UIViewController {
     private let titleLabel: UILabel = {
         let text = UILabel()
         text.translatesAutoresizingMaskIntoConstraints = false
-        text.text = "Новая категория"
+        text.text = NSLocalizedString("categoryCreatingView.title", comment: "")
         text.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         text.textColor = UIColor(named: "Black [day]")
         return text
@@ -46,7 +46,8 @@ final class CreateNewCategoryViewController: UIViewController {
         button.backgroundColor = UIColor(named: "Black [day]")
         button.layer.cornerRadius = 16
         button.layer.masksToBounds = true
-        button.setTitle("Готово", for: .normal)
+        let localized = NSLocalizedString("categoryCreatingView.doneButton", comment: "")
+        button.setTitle(localized, for: .normal)
         button.setTitleColor(UIColor(named: "White"), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.addTarget(self, action: #selector(pushDoneButton), for: .touchUpInside)

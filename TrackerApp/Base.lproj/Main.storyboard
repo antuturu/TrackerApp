@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22684"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -111,6 +110,8 @@
                         <outlet property="addNewTrackerButton" destination="x4c-LE-rzA" id="Jlf-Hl-sar"/>
                         <outlet property="datePicker" destination="oHc-Ca-NCe" id="Bx2-eg-Rsh"/>
                         <outlet property="emptyStackView" destination="4uH-CO-9sI" id="fnD-xW-8WV"/>
+                        <outlet property="emptyTitle" destination="TSE-6S-4DU" id="a5S-rh-Lmc"/>
+                        <outlet property="noSearchResultTitle" destination="0oC-7E-UwT" id="OzA-6c-hSM"/>
                         <outlet property="noSearchResultsStackView" destination="qCU-ch-PXJ" id="B7A-qw-ex1"/>
                         <outlet property="trackersLabel" destination="fen-Ul-UJM" id="j7d-dc-ihs"/>
                     </connections>
@@ -127,7 +128,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <viewLayoutGuide key="safeArea" id="24h-kg-PSy"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" name="White"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Статистика" image="StatisticLogoTabBar" id="wG3-R6-RwW"/>
                 </viewController>
@@ -152,13 +153,10 @@
         <image name="plus" width="19" height="18"/>
         <image name="plus" catalog="system" width="128" height="113"/>
         <namedColor name="Black [day]">
-            <color red="0.10199999809265137" green="0.10599999874830246" blue="0.13300000131130219" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.10196078431372549" green="0.10588235294117647" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="White">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
     </resources>
 </document>

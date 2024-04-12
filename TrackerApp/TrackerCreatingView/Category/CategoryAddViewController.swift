@@ -23,7 +23,8 @@ final class CategoryAddViewController: UIViewController {
         button.backgroundColor = UIColor(named: "Black [day]")
         button.layer.cornerRadius = 16
         button.layer.masksToBounds = true
-        button.setTitle("Добавить категорию", for: .normal)
+        let localizedText = NSLocalizedString("categoryView.addButton", comment: "")
+        button.setTitle(localizedText, for: .normal)
         button.setTitleColor(UIColor(named: "White"), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.addTarget(self, action: #selector(pushAddCategoryButton), for: .touchUpInside)
@@ -33,7 +34,7 @@ final class CategoryAddViewController: UIViewController {
     private let titleLabel: UILabel = {
         let text = UILabel()
         text.translatesAutoresizingMaskIntoConstraints = false
-        text.text = "Категории"
+        text.text = NSLocalizedString("categoryView.title", comment: "")
         text.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         text.textColor = UIColor(named: "Black [day]")
         return text
@@ -62,7 +63,7 @@ final class CategoryAddViewController: UIViewController {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 2
-        label.text = "Привычки и события можно\nобъединить по смыслу"
+        label.text = NSLocalizedString("categoryView.textNotFound", comment: "")
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 12)
         label.textColor = UIColor(named: "Black [day]")

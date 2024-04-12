@@ -34,7 +34,7 @@ final class ScheduleViewController: UIViewController {
     private let titleLabel: UILabel = {
         let text = UILabel()
         text.translatesAutoresizingMaskIntoConstraints = false
-        text.text = "Расписание"
+        text.text = NSLocalizedString("scheduleView.title", comment: "")
         text.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         text.textColor = UIColor(named: "Black [day]")
         return text
@@ -46,7 +46,8 @@ final class ScheduleViewController: UIViewController {
         button.backgroundColor = UIColor(named: "Black [day]")
         button.layer.cornerRadius = 16
         button.layer.masksToBounds = true
-        button.setTitle("Готово", for: .normal)
+        let localized = NSLocalizedString("scheduleView.doneButton", comment: "")
+        button.setTitle(localized, for: .normal)
         button.setTitleColor(UIColor(named: "White"), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.addTarget(self, action: #selector(pushDoneButton), for: .touchUpInside)
