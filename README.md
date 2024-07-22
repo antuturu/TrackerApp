@@ -1,6 +1,16 @@
 
 # Tracker
 
+<table>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/95bbbcb5-48ce-4bd3-8a55-d732b5a5421a" alt="Фото 1"></td>
+    <td><img src="https://github.com/user-attachments/assets/99d3d58a-8693-4a94-aea1-0c433ef20bea" alt="Фото 2"></td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/3512ae4b-ed72-4b57-a8da-3d4e307918cc" alt="Фото 3"></td>
+    <td><img src="https://github.com/user-attachments/assets/2c13d685-d367-4a92-bf76-2d58eb38e973" alt="Фото 4"></td>
+  </tr>
+</table>
 # Ссылки
 
 [Дизайн Figma](https://www.figma.com/file/owAO4CAPTJdpM1BZU5JHv7/Tracker-(YP)?t=SZDLmkWeOPX4y6mp-0)
